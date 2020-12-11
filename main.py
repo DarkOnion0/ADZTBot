@@ -38,9 +38,9 @@ async def pouf(ctx):
     nb = random.randint(1,2)
 
     if nb == 1:
-        await ctx.send('pile | :full_moon_with_face:')
+        await ctx.send(':full_moon_with_face: | pile')
     else:
-        await ctx.send('face | :new_moon_with_face:')
+        await ctx.send(':new_moon_with_face: | face')
 
 
 bot.run(TOKEN)

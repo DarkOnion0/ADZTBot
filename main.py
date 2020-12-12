@@ -1,5 +1,6 @@
 import os
 import random
+import sqlite3
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -13,13 +14,17 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
 
+conn = sqlite3.connect('darkbot.db')
+c = conn.cursor()
+print(conn.total_changes)
+
 # COMMAND
 
 ## linux
 @bot.command(name='linux', help='Linux Propagande')
 async def linux(ctx):
 
-    msg='Linux > Windows **| CHECK** https://archlinux.org/'
+    msg='Linux > ALL **| YOU MUST CHECK** https://archlinux.org/'
 
     response = msg
     await ctx.send(response)
@@ -42,6 +47,12 @@ async def pouf(ctx):
     else:
         await ctx.send(':new_moon_with_face: | face')
 
+## user info
+@bot.command(name='profile', help='Main command for setup a Server Profile (en dev)')
+async def profile(ctx):
+    msg = "**TU COMPRENDS PAS LA PHRASE: EN DEV**"
+
+    await ctx.send(msg)
 
 bot.run(TOKEN)
 

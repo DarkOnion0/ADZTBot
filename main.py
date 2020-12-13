@@ -1,6 +1,6 @@
 import os
 import random
-import sqlite3
+import discord
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -14,10 +14,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 
 bot = commands.Bot(command_prefix='!')
 
-conn = sqlite3.connect('darkbot.db')
-c = conn.cursor()
-print(conn.total_changes)
-
+client = discord.Client()
 # COMMAND
 
 ## linux

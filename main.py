@@ -4,6 +4,7 @@ import discord
 
 from discord.ext import commands
 from dotenv import load_dotenv
+from lib import db
 
 # START
 
@@ -12,6 +13,7 @@ print("BOT STARTED !!!")
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
+DataUser = db.user("data/data_darkbot.db")
 bot = commands.Bot(command_prefix='!')
 
 client = discord.Client()
@@ -45,11 +47,21 @@ async def pouf(ctx):
         await ctx.send(':new_moon_with_face: | face')
 
 ## user info
-@bot.command(name='profile', help='Main command for setup a Server Profile (en dev)')
-async def profile(ctx):
-    msg = "**TU COMPRENDS PAS LA PHRASE: EN DEV**"
+@bot.command(name='profile', help='Main command for setup a Server Profile (en dev)', pass_context = True)
+async def profile(ctx, arg):
+    arg = str(arg)
 
-    await ctx.send(msg)
+    arg = arg.split(" ")
+
+    #print(arg) # debug
+
+    if arg[0] == "setup":
+        #DataUser.add(ctx.message)
+        #print(ctx.message.author, "Hello") # debug
+        author = str(ctx.message.author)
+        author = author.split("#")
+        DataUser.add(author[0])
+        await ctx.send("Welcome {},\nYour profile has been setup successfully :+1:".format(author[0]))
 
 bot.run(TOKEN)
 

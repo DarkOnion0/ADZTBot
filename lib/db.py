@@ -32,17 +32,28 @@ class user:
         
         self.cursor.execute("CREATE TABLE IF NOT EXISTS Log (date INTEGER, logfile BLOB)")
         self.cursor.execute("CREATE TABLE IF NOT EXISTS UserData (username TEXT ,lvl INTEGER, lvl_xp INTEGER, os TEXT, description TEXT, game TEXT)")
-
+        self.connection.commit()
 
     
     def add(self, username):
         """Add user in fonctions of the username passed"""
+        user = self.cursor.execute("SELECT username FROM UserData").fetchall()
         
-        self.cursor.execute("INSERT INTO UserData(username) VALUES (?)", (username,))
-        #self.cursor.execute("INSERT")
+        check = True
 
-        self.connection.commit()
-
+        print(user)
+        
+        for index, UserTmp in enumerate(user):
+            print(UserTmp)
+            
+            if UserTmp == username:
+                check = False
+            else:
+                pass
+        
+        if check == "True":
+            self.cursor.execute("INSERT INTO UserData(username) VALUES (?)", (username,)
+            self.connection.commit()
 #if __name__ == "__main__":
 #    u = "init"
 #    a = user(u)

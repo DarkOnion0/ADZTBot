@@ -48,11 +48,9 @@ class user:
             
             if UserTmp == username:
                 check = False
-            else:
-                pass
         
         if check == "True":
-            self.cursor.execute("INSERT INTO UserData(username) VALUES (?)", (username,)
+            self.cursor.execute("INSERT INTO UserData(username) VALUES (?)", (username,))
             self.connection.commit()
 #if __name__ == "__main__":
 #    u = "init"

@@ -1,26 +1,6 @@
 import sqlite3, os, glob
 from datetime import datetime
 
-# Data
-#PATH = os.path.abspath(os.path.split(__file__)[0])
-#data_dir = os.path.join(PATH, "data")
-#
-#data_db = os.path.join(data_dir, "data_darkbot.db")
-
-#listdir = os.listdir(PATH)
-#index_dir = len(listdir)
-#print(type(listdir), listdir, index_dir)
-
-#try:
-#    assert glob.glob(os.path.join(PATH, "data"))
-#except AssertionError:
-#    os.mkdir(os.path.join(PATH, "data"))
-#    print("Data Folder create")
-
-#connection = sqlite3.connect("data/data_darkbot.db")
-#print(connection.total_changes)
-#cursor = connection.cursor()
-
 class user:
     """A class which handle all fonctions for adding user in the sqlite database"""
     def __init__(self, ConnectionPath):
@@ -41,20 +21,21 @@ class user:
         
         check = True
 
-        print(user, type(user), check)
+        #print(user, type(user), check) # debug
         
         for index, UserTmp in enumerate(user):
             UserTmp = str(UserTmp[0])
-            print("\n",username, UserTmp, type(username), type(UserTmp))
+            #print("\n",username, UserTmp, type(username), type(UserTmp)) # debug
             
             if username == UserTmp:
                 check = False
-        print(check)
+        #print(check) # debug
         
         if check == True:
             self.cursor.execute("INSERT INTO UserData(username) VALUES (?)", (username,))
             print(username)
             self.connection.commit()
+
 #if __name__ == "__main__":
 #    u = "init"
 #    a = user(u)

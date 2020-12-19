@@ -41,16 +41,19 @@ class user:
         
         check = True
 
-        print(user)
+        print(user, type(user), check)
         
         for index, UserTmp in enumerate(user):
-            print(UserTmp)
+            UserTmp = str(UserTmp[0])
+            print("\n",username, UserTmp, type(username), type(UserTmp))
             
-            if UserTmp == username:
+            if username == UserTmp:
                 check = False
+        print(check)
         
-        if check == "True":
+        if check == True:
             self.cursor.execute("INSERT INTO UserData(username) VALUES (?)", (username,))
+            print(username)
             self.connection.commit()
 #if __name__ == "__main__":
 #    u = "init"

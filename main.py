@@ -55,7 +55,7 @@ async def profile(ctx, arg):
 
     #print(arg) # debug
 
-    if arg[0] == "setup":
+    if arg[0] == "init":
         #DataUser.add(ctx.message)
         #print(ctx.message.author, "Hello") # debug
         author = str(ctx.message.author)

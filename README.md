@@ -11,3 +11,6 @@ Petit Bot Discord fait pour le fun avec le framework Discord.py
 	- [ ] Une OS
 - [ ] Créer une option pour envoyer automatiquement des requettes pour inviter les gens a jouer
 - [ ] Intégrer les nouvelles de compte GitLab ou GitHub
+- [ ] Faire une intégration a Spotify
+	- [ ] musique random
+	- [ ] classement de musique

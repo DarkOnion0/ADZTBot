@@ -34,8 +34,8 @@ before_script:
 
 Linting:
   script:
-    - flake8  moyenne-console.py moyennemod.py --count --select=E9,F63,F7,F82 --show-source --statistics
-    - flake8 moyenne-console.py moyennemod.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - flake8 main.py lib/db.py --count --select=E9,F63,F7,F82 --show-source --statistics
+    - flake8 main.py lib/db.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
 Testing:
     script:
@@ -65,8 +65,8 @@ before_script:
 
 Linting:
   script:
-    - flake8  moyenne-console.py moyennemod.py --count --select=E9,F63,F7,F82 --show-source --statistics
-    - flake8 moyenne-console.py moyennemod.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - flake8  main.py lib/db.py --count --select=E9,F63,F7,F82 --show-source --statistics
+    - flake8 main.py lib/db.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
 Testing:
   script:

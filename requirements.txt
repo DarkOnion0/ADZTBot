@@ -1,0 +1,6 @@
+os
+random
+discord
+sqlite3
+datetime
+logging

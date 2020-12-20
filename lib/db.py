@@ -1,4 +1,4 @@
-import sqlite3, os, glob
+import sqlite3, os
 from datetime import datetime
 
 class user:

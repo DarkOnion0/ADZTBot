@@ -50,11 +50,9 @@ async def pouf(ctx):
 @bot.command(name='profile', help='Main command for setup a Server Profile (en dev)', pass_context = True)
 async def profile(ctx, arg):
     arg = str(arg)
-
     arg = arg.split(" ")
 
     #print(arg) # debug
-
     if arg[0] == "init":
         #DataUser.add(ctx.message)
         #print(ctx.message.author, "Hello") # debug
@@ -62,6 +60,8 @@ async def profile(ctx, arg):
         author = author.split("#")
         DataUser.add(author[0])
         await ctx.send("Welcome {},\nYour profile has been setup successfully :+1:".format(author[0]))
-
+    else:
+        msg = "**ERROR**\n veuillez mettre un des arguments suivant :\n`init | init your profile in the database`"
+        await ctx.send(msg)
 bot.run(TOKEN)
 

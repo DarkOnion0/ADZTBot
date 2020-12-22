@@ -14,7 +14,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 DataUser = db.user("data/data_darkbot.db")
-bot = commands.Bot(command_prefix='!')
+bot = commands.Bot(command_prefix='/')
 
 client = discord.Client()
 # COMMAND
@@ -23,7 +23,7 @@ client = discord.Client()
 @bot.command(name='linux', help='Linux Propagande')
 async def linux(ctx):
 
-    msg='Linux > ALL **| YOU MUST CHECK** https://archlinux.org/'
+    msg='**Linux > ALL | YOU MUST CHECK** https://archlinux.org/\nhttps://tenor.com/view/mst3k-join-us-come-gif-13947932'
 
     response = msg
     await ctx.send(response)

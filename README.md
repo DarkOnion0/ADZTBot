@@ -4,16 +4,16 @@
 
 Petit Bot Discord fait pour le fun avec le framework Discord.py
 
-# Idée
+# Features
 - [ ] Annonce le status des personnes dans un salon
 	- [ ] Annoncer quand il joue a un jeux
 	- [ ] Annoncer son status
-- [ ] Rajouter une commande event pour les événements temporaires
+	- [ ] Créer une option pour envoyer automatiquement des requettes pour inviter les gens a jouer
 - [ ] Configurer un profile
 	- [ ] Déscription
 	- [ ] Une OS
-- [ ] Créer une option pour envoyer automatiquement des requettes pour inviter les gens a jouer
+	- [ ] Des niveaux
 - [ ] Intégrer les nouvelles de compte GitLab ou GitHub
-- [ ] Faire une intégration a Spotify
+- [ ] Faire une intégration a Spotify / Youtube
 	- [ ] musique random
-	- [ ] classement de musique
+	- [ ] classement de musique / vidéo

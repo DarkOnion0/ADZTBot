@@ -20,13 +20,24 @@ client = discord.Client()
 # COMMAND
 
 ## linux
-@bot.command(name='linux', help='Linux Propagande')
-async def linux(ctx):
+@bot.command(name='linux', help='Linux Propagande', pass_context = True)
+async def linux(ctx, *arg):
+    
+    arg = list(arg)
+    print(len(arg),type(arg), arg)
 
-    msg='**Linux > ALL | YOU MUST CHECK** https://archlinux.org/\nhttps://tenor.com/view/mst3k-join-us-come-gif-13947932'
+    ### info command, give a list of linux distro
+    if arg[0] == "info":
+        
+        if len(arg) == 1:
+            msg = "**Linux > ALL | YOU MUST CHECK ONE OF THESE LINUX DISTRO :** \n***Arch based distro:*** \n- archlinux \n- manjaro \n- endeavourOS \n\n***RPM distro*** \n- fedora \n- centos stream \n\n***Debian / Ubuntu based distro*** \n- debian \n- linux mint \n- PopOS \n- ubuntu flavour \n\nhttps://tenor.com/view/mst3k-join-us-come-gif-13947932"
+            await ctx.send(msg)
+        
+        if len(arg) == 2:
+            if arg[1] == "archlinux":
+                msg = "**ArchLinux**\n***- WebSite |*** https://archlinux.org/ \n***- Wikipedia |*** https://en.wikipedia.org/wiki/Arch_Linux \n***- Level |*** Hard (it is not a distro for people who don't know or want to understand linux)\n***- Comment |*** I think it's one or the best linux distribution in the world :earth_africa:"
+                await ctx.send(msg)
 
-    response = msg
-    await ctx.send(response)
 
 ## dice
 @bot.command(name='dice', help='Simulates rolling dice between 0 and 10')
@@ -48,9 +59,9 @@ async def pouf(ctx):
 
 ## user info
 @bot.command(name='profile', help='Main command for setup a Server Profile (en dev)', pass_context = True)
-async def profile(ctx, arg):
-    arg = str(arg)
-    arg = arg.split(" ")
+async def profile(ctx, *arg):
+    #arg = str(arg)
+    #arg = arg.split(" ")
 
     #print(arg) # debug
     if arg[0] == "init":

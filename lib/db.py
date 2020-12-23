@@ -11,35 +11,23 @@ class user:
         self.cursor = self.connection.cursor()
         
         self.cursor.execute("CREATE TABLE IF NOT EXISTS Log (date INTEGER, logfile BLOB)")
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS UserData (username TEXT ,lvl INTEGER, lvl_xp INTEGER, os TEXT, description TEXT, game TEXT)")
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS UserData (id INTEGER PRIMARY KEY, username TEXT , creation_date TEXT, birthday TEXT, lvl INTEGER, lvl_xp INTEGER, os TEXT, description TEXT, game TEXT, coins FLOAT, awards_left, timestamp TEXT)")
         self.connection.commit()
 
     
     def add(self, username):
         """Add user in fonctions of the username passed"""
         user = self.cursor.execute("SELECT username FROM UserData").fetchall()
-        
         check = True
 
-        #print(user, type(user), check) # debug
-        
-        for index, UserTmp in enumerate(user):
+        for index, UserTmp in enumerate(user): # check if the user already exist in the database
             UserTmp = str(UserTmp[0])
-            #print("\n",username, UserTmp, type(username), type(UserTmp)) # debug
             
             if username == UserTmp:
                 check = False
-        #print(check) # debug
         
-        if check == True:
-            self.cursor.execute("INSERT INTO UserData(username) VALUES (?)", (username,))
+        if check == True: # if the user doesn't exist, create his profile
+            self.cursor.execute("INSERT INTO UserData(id, username, creation_date, timestamp) VALUES((SELECT max(id) FROM UserData)+1, ?, ?, ?)", (username, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), datetime.now().strftime("%Y-%m-%d %H:%M:%S"),))
+
             print(username)
             self.connection.commit()
-
-#if __name__ == "__main__":
-#    u = "init"
-#    a = user(u)
-#    a.add(u)
-#    rows = cursor.execute("SELECT username FROM UserData").fetchall()
-#    print(rows)
-#    print("Sucess")

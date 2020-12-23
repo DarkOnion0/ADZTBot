@@ -1,6 +1,7 @@
 os
 random
-discord
+discord.py
 sqlite3
 datetime
 logging
+pyyaml

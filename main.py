@@ -12,8 +12,10 @@ print("BOT STARTED !!!")
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+DB_PATH = os.getenv('DB_PATH') + "/" + os.getenv('DB_NAME')
+print(DB_PATH)
 
-DataUser = db.user("data/data_darkbot.db")
+DataUser = db.user(DB_PATH)
 bot = commands.Bot(command_prefix='/')
 
 client = discord.Client()

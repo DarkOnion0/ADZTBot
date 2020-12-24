@@ -1,7 +1,2 @@
-os
-random
 discord.py
-sqlite3
-datetime
-logging
-pyyaml
+python-dotenv

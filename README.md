@@ -24,7 +24,7 @@ A little discord bot make just for fun :grin: with Discord.py framework and shar
 5. start the bot, `python main.py` 
 
 ## ENV variable / file
-```
+```env
 # MANDATORY variable (it will contain the discord bot token for the python script)
 DISCORD_TOKEN= your_discord_bot_token
 

@@ -1,4 +1,4 @@
-# DarkBot
+# ADZTBot
 A little discord bot make just for fun :grin: with Discord.py framework and shared with docker
 
 # Features :rocket: 

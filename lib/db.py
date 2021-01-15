@@ -73,7 +73,7 @@ class vote:
                 usernameId = int(user[0])
 
         if check == True:
-            return "0.1"
+            return (None, 0.1)
         else:
             check2 = True
 
@@ -92,6 +92,8 @@ class vote:
                     ),
                 )
                 self.connection.commit()
-                return "1"
+                idTmp = len(linkTmp2) + 1
+                print(idTmp)
+                return (idTmp, 1)
             else:
-                return "0.2"
+                return (None, 0.2)

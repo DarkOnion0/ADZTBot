@@ -1,2 +1,4 @@
 discord.py
 python-dotenv
+bs4
+requests

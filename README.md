@@ -19,7 +19,7 @@ A little discord bot make just for fun :grin: with Discord.py framework and shar
 
 1. clone the repository or download the release
 2. build the docker image, `docker build -t --no-cache adztbot .`
-3. start the container with a `.env` file for the environement variables, `docker run --env-file=.env adztbot:latest`
+3. start the container with a `.env` file for the environement variables, `docker run -dv your_path_for_data:/usr/src/ADZTBot/the_name_of_the_data_folder_choosen --env-file=.env adztbot:latest`
 
 ## Linux 🐧
 
@@ -40,6 +40,9 @@ DB_PATH= your_db_path
 
 # Using docker you can omit this line in your .env file (defaut value = bot_data), with a directe script you MUST specify the name
 DB_NAME= your_db_name
+
+CHANNEL_YT= your_channel_for_video_id
+CHANNEL_SP= your_channel_for_music_id
 ```
 
 # Contributing

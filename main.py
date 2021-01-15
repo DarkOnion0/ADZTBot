@@ -1,8 +1,8 @@
 import os
 import random
 import discord
-import requests 
-from bs4 import BeautifulSoup 
+import requests
+from bs4 import BeautifulSoup
 from discord.ext import commands
 from dotenv import load_dotenv
 from lib import db
@@ -15,7 +15,7 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 DB_PATH = os.getenv("DB_PATH") + "/" + os.getenv("DB_NAME")
 CHANNEL_YT = os.getenv("CHANNEL_YT")
-CHANNEL_SP= os.getenv("CHANNEL_SP")
+CHANNEL_SP = os.getenv("CHANNEL_SP")
 
 print(DB_PATH)
 
@@ -105,50 +105,54 @@ async def post(ctx, *arg):
     arg = list(arg)
     author = str(ctx.message.author)
     authorId = int(ctx.message.author.id)
-    authorTmp = discord.utils.get(ctx.guild.members, name=str(arg[0]), discriminator=str(arg[1]))
+    authorTmp = discord.utils.get(
+        ctx.guild.members, name=str(arg[0]), discriminator=str(arg[1])
+    )
     print(authorId, authorTmp)
 
     author = author.split("#")
-    embed = discord.Embed(colour = discord.Color.green())
+    embed = discord.Embed(colour=discord.Color.green())
 
-    if arg[0] == "m": # music option
+    if arg[0] == "m":  # music option
         result = DataPost.post(author[0], "m", arg[1])
         print(result, type(result))
         muId, answer = result
 
         print(answer)
-        if answer == 0.1: # ERROR -> profile doesn't exist
+        if answer == 0.1:  # ERROR -> profile doesn't exist
             await ctx.send(
                 "**:warning: ERROR 1 :** please create a profile by typing `/profile init`"
             )
-        if answer == 0.2: # ERROR -> already post
+        if answer == 0.2:  # ERROR -> already post
             await ctx.send(
                 "**:warning: ERROR 2 :** please don't post a link that was already post"
             )
-        if answer == 1: # SUCCESS
+        if answer == 1:  # SUCCESS
             print("Hello")
             channelM = bot.get_channel(int(CHANNEL_SP))
 
-            # target url 
+            # target url
             url = arg[1]
-            # making requests instance 
-            reqs = requests.get(url) 
-            # using the BeaitifulSoup module 
-            soup = BeautifulSoup(reqs.text, 'html.parser') 
-            # displaying the title 
-            for title in soup.find_all('title'): 
+            # making requests instance
+            reqs = requests.get(url)
+            # using the BeaitifulSoup module
+            soup = BeautifulSoup(reqs.text, "html.parser")
+            # displaying the title
+            for title in soup.find_all("title"):
                 url = title.get_text()
 
-            msg = url + '\n' + arg[1]
+            msg = url + "\n" + arg[1]
 
             embed.set_author(name="Posted by {}".format(author[0]))
             embed.add_field(name="Music #{}".format(muId), value=msg, inline=True)
 
-            await channelM.send(embed=embed) # send message in the channel for music proposal
+            await channelM.send(
+                embed=embed
+            )  # send message in the channel for music proposal
             await ctx.send(
-                "**:star: SUCCESS : **Your post has been registred successfully" # send message in the current channel
-             )
-    elif arg[0] == "v": # video option
+                "**:star: SUCCESS : **Your post has been registred successfully"  # send message in the current channel
+            )
+    elif arg[0] == "v":  # video option
         print("vidéo otpion")
     else:
         msg = "**:warning: ERROR :warning:** please specify *v or m* option"

@@ -111,9 +111,9 @@ async def post(ctx, *arg):
     print(authorId, authorTmp)
 
     author = author.split("#")
-    embed = discord.Embed(colour=discord.Color.green())
 
     if arg[0] == "m":  # music option
+        embed = discord.Embed(colour=discord.Color.green())
         result = DataPost.post(author[0], "m", arg[1])
         print(result, type(result))
         muId, answer = result
@@ -153,7 +153,45 @@ async def post(ctx, *arg):
                 "**:star: SUCCESS : **Your post has been registred successfully"  # send message in the current channel
             )
     elif arg[0] == "v":  # video option
-        print("vidéo otpion")
+        embed = discord.Embed(colour=discord.Color.red())
+        result = DataPost.post(author[0], "v", arg[1])
+        print(result, type(result))
+        muId, answer = result
+
+        print(answer)
+        if answer == 0.1:  # ERROR -> profile doesn't exist
+            await ctx.send(
+                "**:warning: ERROR 1 :** please create a profile by typing `/profile init`"
+            )
+        if answer == 0.2:  # ERROR -> already post
+            await ctx.send(
+                "**:warning: ERROR 2 :** please don't post a link that was already post"
+            )
+        if answer == 1:  # SUCCESS
+            print("Hello")
+            channelM = bot.get_channel(int(CHANNEL_YT))
+
+            # target url
+            url = arg[1]
+            # making requests instance
+            reqs = requests.get(url)
+            # using the BeaitifulSoup module
+            soup = BeautifulSoup(reqs.text, "html.parser")
+            # displaying the title
+            for title in soup.find_all("title"):
+                url = title.get_text()
+
+            msg = url + "\n" + arg[1]
+
+            embed.set_author(name="Posted by {}".format(author[0]))
+            embed.add_field(name="Video #{}".format(muId), value=msg, inline=True)
+
+            await channelM.send(
+                embed=embed
+            )  # send message in the channel for music proposal
+            await ctx.send(
+                "**:star: SUCCESS : **Your post has been registred successfully {}".format(author[0])  # send message in the current channel
+            )
     else:
         msg = "**:warning: ERROR :warning:** please specify *v or m* option"
         await ctx.send(msg)
@@ -164,14 +202,26 @@ async def post(ctx, *arg):
 
 @bot.command(name="vote", pass_context=True)
 async def vote(ctx, *arg):
+
     arg = list(arg)
-    if arg[0] == "m":
-        print("music option")
-    elif arg[0] == "v":
-        print("vidéo otpion")
-    else:
-        msg = "**:warning: ERROR :warning:** please specify *v or m* option"
+    author = str(ctx.message.author)
+    author = author.split("#")
+
+    if len(arg) != 3:
+        msg = "**:warning: ERROR :warning:** please specify *v or m* option, after the music id and finally the vote (+1 or -1)"
         await ctx.send(msg)
 
+    result = DataPost.vote(author[0], arg[0], arg[1], arg[2])
+
+    if result == 0.1:
+        await ctx.send(
+            "**:warning: ERROR 1 :** please create a profile by typing `/profile init`"
+        )
+    if result == 0.2:
+        await ctx.send("**:warning: ERROR 2 :** the post id `{}` doesn't exist in the `{}` categorie".format(arg[1], arg[0]))
+    if result == 0.3:
+        await ctx.send("**:warning: ERROR 3 :** please don't revote on the same post")
+    if result == 1:
+        await ctx.send("**:star: SUCCESS :** Your vote has been successfully registred {}".format(author[0]))
 
 bot.run(TOKEN)

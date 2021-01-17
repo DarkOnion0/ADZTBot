@@ -116,7 +116,9 @@ class vote:
 
     def vote(self, username, t, i, vote):
         user = self.cursor.execute("SELECT id, username FROM UserData").fetchall()
-        values = self.cursor.execute("SELECT id, type, postId FROM VoteTable").fetchall()
+        values = self.cursor.execute(
+            "SELECT id, type, postId FROM VoteTable"
+        ).fetchall()
         userVote = self.cursor.execute("SELECT id, voteUser FROM VoteTable").fetchall()
         score = self.cursor.execute("SELECT id, score FROM VoteTable").fetchall()
         check = True
@@ -131,7 +133,11 @@ class vote:
 
         if check == False:
             check = True
-            for idTmp, typeTmp, postIdTmp in values: #check if the post id exist in the database
+            for (
+                idTmp,
+                typeTmp,
+                postIdTmp,
+            ) in values:  # check if the post id exist in the database
                 print(idTmp, typeTmp, postIdTmp, i, t)
                 if str(typeTmp) == str(t):
                     print("step 1.1")
@@ -145,19 +151,23 @@ class vote:
 
                 print("step 2.1")
                 check = False
-                for idTmp, userTmp in userVote: #check if the user already vote
+                for idTmp, userTmp in userVote:  # check if the user already vote
                     userTmp = userTmp.split(",")
                     userAll = userTmp
                     print(userTmp)
                     if idTmp == iTmp:
                         uTmp = userTmp
                         for userTmp2 in userTmp:
-                            print(userTmp2, usernameId, type(userTmp2), type(usernameId))
+                            print(
+                                userTmp2, usernameId, type(userTmp2), type(usernameId)
+                            )
                             if int(userTmp2) == usernameId:
                                 print("step 2.2")
                                 check = True
                 print("step 3")
-                if check == False: #add vote and username id into the database for the choosen post id
+                if (
+                    check == False
+                ):  # add vote and username id into the database for the choosen post id
                     uTmp = list(uTmp)
                     uTmp.append(" " + str(usernameId))
                     uTmp = ",".join(uTmp)
@@ -178,10 +188,10 @@ class vote:
 
                     print("step 4")
 
-                    return 1 # succses
+                    return 1  # succses
                 else:
-                    return 0.3 # the user already vote
+                    return 0.3  # the user already vote
             else:
-                return 0.2 # the post doesn't exist
+                return 0.2  # the post doesn't exist
         else:
-            return 0.1 # user doesn't exist
+            return 0.1  # user doesn't exist

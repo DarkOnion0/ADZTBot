@@ -190,7 +190,9 @@ async def post(ctx, *arg):
                 embed=embed
             )  # send message in the channel for music proposal
             await ctx.send(
-                "**:star: SUCCESS : **Your post has been registred successfully {}".format(author[0])  # send message in the current channel
+                "**:star: SUCCESS : **Your post has been registred successfully {}".format(
+                    author[0]
+                )  # send message in the current channel
             )
     else:
         msg = "**:warning: ERROR :warning:** please specify *v or m* option"
@@ -218,10 +220,19 @@ async def vote(ctx, *arg):
             "**:warning: ERROR 1 :** please create a profile by typing `/profile init`"
         )
     if result == 0.2:
-        await ctx.send("**:warning: ERROR 2 :** the post id `{}` doesn't exist in the `{}` categorie".format(arg[1], arg[0]))
+        await ctx.send(
+            "**:warning: ERROR 2 :** the post id `{}` doesn't exist in the `{}` categorie".format(
+                arg[1], arg[0]
+            )
+        )
     if result == 0.3:
         await ctx.send("**:warning: ERROR 3 :** please don't revote on the same post")
     if result == 1:
-        await ctx.send("**:star: SUCCESS :** Your vote has been successfully registred {}".format(author[0]))
+        await ctx.send(
+            "**:star: SUCCESS :** Your vote has been successfully registred {}".format(
+                author[0]
+            )
+        )
+
 
 bot.run(TOKEN)

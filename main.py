@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from discord.ext import commands
 from dotenv import load_dotenv
 from lib import db
+from link_preview import link_preview
 
 # START
 
@@ -25,7 +26,29 @@ DataPost = db.vote(DB_PATH)
 bot = commands.Bot(command_prefix="/")
 
 client = discord.Client()
+bot.remove_command("help")
 # COMMAND
+# help
+@bot.command(name="help")
+async def help(ctx):
+    urlDict = link_preview.generate_dict("https://github.com/DarkOnion0/ADZTBot")
+    embed = discord.Embed(
+        title=urlDict["title"],
+        description="Check the command section on the README\n\n"
+        + urlDict["description"],
+        url="https://github.com/DarkOnion0/ADZTBot#command-list",
+        colour=discord.Color.gold(),
+    )
+
+    embed.set_author(
+        name="HELP",
+        icon_url="https://raw.githubusercontent.com/DarkOnion0/ADZTBot/master/logo.png",
+        url="https://github.com/DarkOnion0/ADZTBot",
+    )
+    embed.set_thumbnail(url=urlDict["image"])
+
+    await ctx.send(embed=embed)
+
 
 # linux
 
@@ -56,9 +79,7 @@ async def roll(ctx):
 
 
 # pile ou face
-
-
-@bot.command(name="pouf", help="Pile ou Face game, are you lucky ? Bet and try it :)")
+@bot.command(name="pouf", help="simulate a coins launch (pile ou face game)")
 async def pouf(ctx):
     nb = random.randint(1, 2)
 
@@ -100,7 +121,7 @@ async def profile(ctx, *arg):
 # post command
 
 
-@bot.command(name="post", pass_context=True)
+@bot.command(name="post", pass_context=True, add_reactions=True, embed_links=True)
 async def post(ctx, *arg):
     arg = list(arg)
     author = str(ctx.message.author)
@@ -135,16 +156,21 @@ async def post(ctx, *arg):
             url = arg[1]
             # making requests instance
             reqs = requests.get(url)
+            urlDict = link_preview.generate_dict(url)
             # using the BeaitifulSoup module
             soup = BeautifulSoup(reqs.text, "html.parser")
             # displaying the title
             for title in soup.find_all("title"):
                 url = title.get_text()
 
-            msg = url + "\n" + arg[1]
+            msg = "[{}]({})".format(url, arg[1])
+            # url + "\n" + arg[1]
 
-            embed.set_author(name="Posted by {}".format(author[0]))
+            embed.set_author(
+                name="Posted by {}".format(author[0]), icon_url=ctx.author.avatar_url
+            )
             embed.add_field(name="Music #{}".format(muId), value=msg, inline=True)
+            embed.set_image(url=urlDict["image"])
 
             await channelM.send(
                 embed=embed
@@ -175,16 +201,18 @@ async def post(ctx, *arg):
             url = arg[1]
             # making requests instance
             reqs = requests.get(url)
+            urlDict = link_preview.generate_dict(url)
             # using the BeaitifulSoup module
             soup = BeautifulSoup(reqs.text, "html.parser")
             # displaying the title
             for title in soup.find_all("title"):
                 url = title.get_text()
 
-            msg = url + "\n" + arg[1]
+            msg = "[{}]({})".format(url, arg[1])
 
             embed.set_author(name="Posted by {}".format(author[0]))
             embed.add_field(name="Video #{}".format(muId), value=msg, inline=True)
+            embed.set_image(url=urlDict["image"])
 
             await channelM.send(
                 embed=embed

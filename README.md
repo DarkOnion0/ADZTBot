@@ -4,14 +4,16 @@ A little discord bot make just for fun :grin: with Discord.py framework and shar
 
 # Features :rocket:
 
-- vote command for youtube and spotify post (dev)
+- vote command for youtube and spotify post (beta)
 - linux command (dispaly information about linux)
-- a simple profile systeme (beta)
+- lot of other funny command, see [command list](#command-list)
 
 # TO-DO 💡
 
 - create game invite (a message that ping everyone who accept to be notify to play a game with the people)
 - integreate webhooks
+- a simple profile systeme (in work)
+- basic administration
 
 # Installation
 
@@ -44,6 +46,28 @@ DB_NAME= your_db_name
 CHANNEL_YT= your_channel_for_video_id
 CHANNEL_SP= your_channel_for_music_id
 ```
+
+# Command list
+
+- `/pouf` simulate a coins launch (pile ou face game)
+
+- `/dice` simulate a dice
+
+- `/linux info [ARG]` give info on linux and linux distribution
+	- **[ARG]** can be a anything or the name of a linux distribution list in the base command
+
+- `/profile [ARG]`
+	- **[ARG]** right now the only things you can pass to the command is the `init` option
+		- `init` an argument that create your profile in the database
+
+- `/post [CATEGORIE] [LINK]` let user post music or video
+	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
+	- **[LINK]** it is the link you want to share
+
+- `/vote [CATEGORIE] [ID] [VOTE]` let user vote on existing post
+	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
+	- **[ID]** it's the id given after the `#` in the message
+	- **[VOTE]** it can be `+1` or `-1` (you can only vote ontime by post, **⚠️ a vote is definitive**)
 
 # Contributing
 - We need your help :handshake:

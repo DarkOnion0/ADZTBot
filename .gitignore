@@ -1,6 +1,10 @@
+.env.yml
 .env
+
 test.py
-env
+
 darkbot.db
+
 data
+
 __pycache__

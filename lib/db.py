@@ -82,12 +82,12 @@ class vote:
 
             for typeTmp, linkTmp in linkTmp2:
                 linkTmp = list(linkTmp)
+                if "".join(linkTmp) == link:
+                    check2 = False
                 if typeTmp == "m":
                     mCount += 1
                 if typeTmp == "v":
                     vCount += 1
-                if "".join(linkTmp) == link:
-                    check2 = False
                 print("\n")
                 print("".join(linkTmp), link, t, typeTmp)
 
@@ -96,7 +96,7 @@ class vote:
                     idTmp = mCount + 1
                 elif t == "v":
                     idTmp = vCount + 1
-                voteUser = "0, " + str(idTmp)
+                voteUser = "0, " + str(usernameId)
                 self.cursor.execute(
                     "INSERT INTO VoteTable(id, postId, user, type, link, score, voteUser) VALUES((SELECT max(id) FROM VoteTable)+1, ?, ?, ?, ?, ?, ?)",
                     (

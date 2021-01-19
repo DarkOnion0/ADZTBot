@@ -2,7 +2,7 @@
 
 ![Docker](https://github.com/DarkOnion0/ADZTBot/workflows/Docker/badge.svg?branch=master)
 
-A little discord bot make just for fun :grin: with Discord.py framework and shared with docker
+A little discord bot make just for fun :grin: with Discord.py framework and shared with docker. The project is currently in **BETA**, so it can have some bugs
 
 # Features :rocket:
 

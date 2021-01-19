@@ -133,98 +133,60 @@ async def post(ctx, *arg):
 
     author = author.split("#")
 
-    if arg[0] == "m":  # music option
-        embed = discord.Embed(colour=discord.Color.green())
-        result = DataPost.post(author[0], "m", arg[1])
-        print(result, type(result))
-        muId, answer = result
+    result = DataPost.post(author[0], arg[0], arg[1])
+    print(result, type(result))
+    muId, answer = result
 
-        print(answer)
-        if answer == 0.1:  # ERROR -> profile doesn't exist
-            await ctx.send(
-                "**:warning: ERROR 1 :** please create a profile by typing `/profile init`"
-            )
-        if answer == 0.2:  # ERROR -> already post
-            await ctx.send(
-                "**:warning: ERROR 2 :** please don't post a link that was already post"
-            )
-        if answer == 1:  # SUCCESS
-            print("Hello")
+    print(answer)
+    if answer == 0.1:  # ERROR -> profile doesn't exist
+        await ctx.send(
+            "**:warning: ERROR 1 :** please create a profile by typing `/profile init`"
+        )
+    if answer == 0.2:  # ERROR -> already post
+        await ctx.send(
+            "**:warning: ERROR 2 :** please don't post a link that was already post"
+        )
+    if answer == 1:  # SUCCESS
+        print("Hello")
+
+        # target url
+        url = arg[1]
+        # making requests instance
+        reqs = requests.get(url)
+        urlDict = link_preview.generate_dict(url)
+        # using the BeaitifulSoup module
+        soup = BeautifulSoup(reqs.text, "html.parser")
+        # displaying the title
+        for title in soup.find_all("title"):
+            url = title.get_text()
+
+        msg = "[{}]({})".format(url, arg[1])
+
+        if arg[0] == "m":
+            embed = discord.Embed(colour=discord.Color.green())
             channelM = bot.get_channel(int(CHANNEL_SP))
-
-            # target url
-            url = arg[1]
-            # making requests instance
-            reqs = requests.get(url)
-            urlDict = link_preview.generate_dict(url)
-            # using the BeaitifulSoup module
-            soup = BeautifulSoup(reqs.text, "html.parser")
-            # displaying the title
-            for title in soup.find_all("title"):
-                url = title.get_text()
-
-            msg = "[{}]({})".format(url, arg[1])
-            # url + "\n" + arg[1]
-
-            embed.set_author(
-                name="Posted by {}".format(author[0]), icon_url=ctx.author.avatar_url
-            )
-            embed.add_field(name="Music #{}".format(muId), value=msg, inline=True)
-            embed.set_image(url=urlDict["image"])
-
-            await channelM.send(
-                embed=embed
-            )  # send message in the channel for music proposal
-            await ctx.send(
-                "**:star: SUCCESS : **Your post has been registred successfully"  # send message in the current channel
-            )
-    elif arg[0] == "v":  # video option
-        embed = discord.Embed(colour=discord.Color.red())
-        result = DataPost.post(author[0], "v", arg[1])
-        print(result, type(result))
-        muId, answer = result
-
-        print(answer)
-        if answer == 0.1:  # ERROR -> profile doesn't exist
-            await ctx.send(
-                "**:warning: ERROR 1 :** please create a profile by typing `/profile init`"
-            )
-        if answer == 0.2:  # ERROR -> already post
-            await ctx.send(
-                "**:warning: ERROR 2 :** please don't post a link that was already post"
-            )
-        if answer == 1:  # SUCCESS
-            print("Hello")
+        if arg[0] == "v":
+            embed = discord.Embed(colour=discord.Color.red())
             channelM = bot.get_channel(int(CHANNEL_YT))
+        embed.set_author(
+            name="Posted by {}".format(author[0]), icon_url=ctx.author.avatar_url
+        )
 
-            # target url
-            url = arg[1]
-            # making requests instance
-            reqs = requests.get(url)
-            urlDict = link_preview.generate_dict(url)
-            # using the BeaitifulSoup module
-            soup = BeautifulSoup(reqs.text, "html.parser")
-            # displaying the title
-            for title in soup.find_all("title"):
-                url = title.get_text()
-
-            msg = "[{}]({})".format(url, arg[1])
-
-            embed.set_author(name="Posted by {}".format(author[0]))
+        if arg[0] == "m":
+            embed.add_field(name="Music #{}".format(muId), value=msg, inline=True)
+        if arg[0] == "v":
             embed.add_field(name="Video #{}".format(muId), value=msg, inline=True)
-            embed.set_image(url=urlDict["image"])
 
-            await channelM.send(
-                embed=embed
-            )  # send message in the channel for music proposal
-            await ctx.send(
-                "**:star: SUCCESS : **Your post has been registred successfully {}".format(
-                    author[0]
-                )  # send message in the current channel
-            )
-    else:
-        msg = "**:warning: ERROR :warning:** please specify *v or m* option"
-        await ctx.send(msg)
+        embed.set_image(url=urlDict["image"])
+
+        await channelM.send(
+            embed=embed
+        )  # send message in the channel for music proposal
+        await ctx.send(
+            "**:star: SUCCESS : **Your post has been registred successfully \n```type = {} \nlink = {} \nid = {}```".format(
+                arg[0], arg[1], muId
+            )  # send message in the current channel
+        )
 
 
 # vote command

@@ -225,4 +225,57 @@ async def vote(ctx, *arg):
         )
 
 
+# stat command
+
+
+@bot.command(name="stats", pass_context=True)
+async def stats(ctx, *arg):
+
+    arg = list(arg)
+    author = str(ctx.message.author)
+    author = author.split("#")
+
+    if len(arg) != 2:
+        await ctx.send(
+            "**:warning: ERROR :** please specify the categorie and the id or the username"
+        )
+
+    else:
+        result = DataPost.stats(arg[0], arg[1])
+        result, type_f, postid_f, user_f, link_f, score_f, vote_user_f = result
+
+        if result == 0.1:
+            await ctx.send("**:warning: ERROR 1 :** the post doesn't exist")
+        elif result == 1:
+
+            # target url
+            url = link_f
+            # making requests instance
+            reqs = requests.get(url)
+            urlDict = link_preview.generate_dict(url)
+            # using the BeaitifulSoup module
+            soup = BeautifulSoup(reqs.text, "html.parser")
+            # displaying the title
+            for title in soup.find_all("title"):
+                url = title.get_text()
+
+            msg = "[{}]({})".format(url, link_f)
+
+            r = random.randint(0, 255)  # random color chooser
+            g = random.randint(0, 255)
+            b = random.randint(0, 255)
+
+            embed = discord.Embed(colour=discord.Color.from_rgb(r, g, b))
+            embed.add_field(name="Title", value=msg, inline=False)
+            embed.add_field(name="User", value=user_f, inline=True)
+            embed.add_field(name="Id", value=postid_f, inline=True)
+            embed.add_field(name="Score", value=score_f, inline=True)
+
+            embed.set_thumbnail(url=urlDict["image"])
+
+            print(ctx.author.avatar_url)
+
+            await ctx.send(embed=embed)
+
+
 bot.run(TOKEN)

@@ -115,6 +115,7 @@ class vote:
                 return (None, 0.2)
 
     def vote(self, username, t, i, vote):
+        """add vote on post"""
         user = self.cursor.execute("SELECT id, username FROM UserData").fetchall()
         values = self.cursor.execute(
             "SELECT id, type, postId FROM VoteTable"
@@ -195,3 +196,89 @@ class vote:
                 return 0.2  # the post doesn't exist
         else:
             return 0.1  # user doesn't exist
+
+    def stats(self, t, i):
+        """give stats on an existing post in the database"""
+        values = self.cursor.execute(
+            "SELECT id, type, postId FROM VoteTable"
+        ).fetchall()
+        post_info = self.cursor.execute(
+            "SELECT id, type, postId, user, link, score, voteUser FROM VoteTable"
+        ).fetchall()
+        user = self.cursor.execute("SELECT id, username FROM UserData").fetchall()
+
+        check = True
+
+        for (
+            idTmp,
+            typeTmp,
+            postIdTmp,
+        ) in values:  # check if the post id exist in the database
+            print(idTmp, typeTmp, postIdTmp, i, t)
+
+            if str(typeTmp) == str(t):
+                print("\nstep 1")
+
+                if int(postIdTmp) == int(i):
+                    db_id_tmp = idTmp
+                    i_post_tmp = idTmp
+                    check = False
+                    print(db_id_tmp, i_post_tmp)
+
+            print("\n   step 1.1")
+
+        if check == False:
+            check = True
+            print("\nstep 2")
+            for (
+                id_tmp,
+                type_tmp,
+                postid_tmp,
+                user_tmp,
+                link_tmp,
+                score_tmp,
+                vote_user_tmp,
+            ) in post_info:
+
+                if id_tmp == db_id_tmp:
+                    type_f = type_tmp
+                    postid_f = postid_tmp
+                    user_f = user_tmp
+                    link_f = link_tmp
+                    score_f = score_tmp
+                    vote_user_f = vote_user_tmp
+                    print(type_f, postid_f, user_f, link_f, score_f, vote_user_f)
+
+            print("\n   step 2.2")
+
+            for user_id_tmp, user_name_tmp in user:
+                if user_id_tmp == user_f:
+                    user_f = user_name_tmp
+                    check = False
+                    print(user_f)
+
+            if check == False:
+                print(
+                    "\nstep 3", type_f, postid_f, user_f, link_f, score_f, vote_user_f
+                )
+                return (1, type_f, postid_f, user_f, link_f, score_f, vote_user_f)
+            else:
+                return (
+                    0.2,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                    None,
+                )  # if the script failed to get the username of the author of the post
+        else:
+            return (
+                0.1,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            )  # if the post doesn't exist in the database

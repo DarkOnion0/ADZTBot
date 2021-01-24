@@ -8,3 +8,7 @@ darkbot.db
 data
 
 __pycache__
+
+.vscode
+.vim
+.pytest_cache

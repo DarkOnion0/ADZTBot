@@ -22,6 +22,7 @@ print(DB_PATH)
 
 DataUser = db.user(DB_PATH)
 DataPost = db.vote(DB_PATH)
+v = "latest"
 
 bot = commands.Bot(command_prefix="/")
 
@@ -46,6 +47,7 @@ async def help(ctx):
         url="https://github.com/DarkOnion0/ADZTBot",
     )
     embed.set_thumbnail(url=urlDict["image"])
+    embed.set_footer(text=v)
 
     await ctx.send(embed=embed)
 
@@ -100,22 +102,32 @@ async def pouf(ctx):
 async def profile(ctx, *arg):
     # arg = str(arg)
     # arg = arg.split(" ")
+    authorId = int(ctx.message.author.id)
+    author = str(ctx.message.author)
+    author = author.split("#")
 
     # print(arg) # debug
     if arg[0] == "init":
-        # DataUser.add(ctx.message)
         # print(ctx.message.author, "Hello") # debug
-        author = str(ctx.message.author)
-        author = author.split("#")
-        DataUser.add(author[0])
-        await ctx.send(
-            "Welcome {},\nYour profile has been setup successfully :+1:".format(
-                author[0]
+        
+        result = DataUser.add(author[0], authorId)
+        
+        result = int(result)
+        if result == 0:
+            await ctx.send("**:warning: ERROR :** You already exist in the database")
+        elif result == 1:
+            await ctx.send(
+                "Welcome {},\nYour profile has been setup successfully :+1:".format(
+                    author[0]
+                )
             )
-        )
-    else:
-        msg = "**ERROR**\n veuillez mettre un des arguments suivant :\n`init | init your profile in the database`"
-        await ctx.send(msg)
+    if arg[0] == "update":
+        DataUser.update(author[0], authorId, arg=("update_name", arg[1]))
+
+        await ctx.send("**:star: SUCCSES :** Your {} has been succsesfully updated".format(arg[1]))
+    #else:
+    #    msg = "**ERROR**\n veuillez mettre un des arguments suivant :\n`init | init your profile in the database`"
+    #    await ctx.send(msg)
 
 
 # post command

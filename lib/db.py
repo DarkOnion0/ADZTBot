@@ -18,36 +18,83 @@ class user:
         self.cursor = self.connection.cursor()
 
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS UserData (id INTEGER PRIMARY KEY, username TEXT , creation_date TEXT, birthday TEXT, lvl INTEGER, lvl_xp INTEGER, os TEXT, description TEXT, game TEXT, coins FLOAT, awards_left, timestamp TEXT)"
+            "CREATE TABLE IF NOT EXISTS UserData (id INTEGER PRIMARY KEY, username_id INTEGER, username TEXT , creation_date TEXT, birthday TEXT, lvl INTEGER, lvl_xp INTEGER, os TEXT, description TEXT, game TEXT, coins FLOAT, awards_left, timestamp TEXT)"
         )
         self.connection.commit()
 
-    def add(self, username):
+    def add(self, username, username_id):
         """Add user in fonctions of the username passed"""
-        user = self.cursor.execute("SELECT username FROM UserData").fetchall()
-        check = True
+        user = self.cursor.execute("SELECT username_id FROM UserData").fetchall()
+        check = False
 
         for userTmp in user:  # check if the user already exist in the database
-            userTmp = str(userTmp[0])
-            if username == userTmp:
-                check = False
+            userTmp = int(userTmp)
+            if username_id == userTmp:
+                check = True
 
-        if check:  # if the user doesn't exist, create his profile
+        if check == False:  # if the user doesn't exist, create his profile
             self.cursor.execute(
-                "INSERT INTO UserData(id, username, creation_date, timestamp) VALUES((SELECT max(id) FROM UserData)+1, ?, ?, ?)",
+                "INSERT INTO UserData(id, username_id, username, creation_date, timestamp) VALUES((SELECT max(id) FROM UserData)+1, ?, ?, ?, ?)",
                 (
+                    username_id,
                     username,
                     timestamp(),
                     timestamp(),
                 ),
             )
-            print(username)
+            print(username, username_id)
             self.connection.commit()
+            return 1
+        else:
+            return 0
+    
+    def update(self, username, username_id, arg=None):
+        user = self.cursor.execute("SELECT id, username_id, username FROM UserData").fetchall()
 
+        print(username, username_id, arg, user)
+        print("\nstep 1")
+
+        if arg[0] == "update_name":
+            print("step 1.1")            
+            if arg[1] == "id": # udpate id
+                user = self.cursor.execute("SELECT id, username FROM UserData").fetchall()
+                print("\nstep 2 --> id")
+
+                for i, user_tmp in user: 
+                    #userTmp = str(userTmp[0])
+                    #print(tmp)
+                    #tmp = list(tmp)
+                    #print(tmp, tmp[0], tmp[1], tmp[2])
+                    
+                    #i = tmp[0]
+                    #username_id_tmp = tmp[1]
+                    #user_tmp= tmp[2]
+                    
+                    print(i, user_tmp)
+                    
+                    if username == user_tmp:
+                        print("step 2.1")
+                        self.cursor.execute("UPDATE UserData SET username_id = ? WHERE id = ?", (username_id, i,),)
+
+                        self.connection.commit()
+            
+            if arg[1] == "name": # udpate name
+                print("\nstep 2 --> name")
+                
+                for i, username_id_tmp, userTmp in user:  
+                    username_id = int(username_id_tmp)
+                    
+                    print(i, username_id_tmp, userTmp)
+                    if username_id == username_id_tmp:
+                        print("step 2.1")
+                        self.cursor.execute("UPDATE UserData SET username = ? WHERE id = ?", (username, i,),)
+
+                        self.connection.commit()
+            
 
 class vote:
-    """A class whixh handle all fonctions for all the vote command in the sqlite database"""
 
+    """A class whixh handle all fonctions for all the vote command in the sqlite database"""
     def __init__(self, ConnectionPath):
         """Defined the path of the DB"""
 

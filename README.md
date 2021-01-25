@@ -61,7 +61,7 @@ CHANNEL_SP= your_channel_for_music_id
 	- **[COMMAND]**
 		- `init` an argument that create your profile in the database
 		- `update` an argument that update your `user_id` or your `username`
-    		- **[ARG]** `id` let the user update his id if he doesn't exist (only for the [v2.2.0](https://github.com/DarkOnion0/ADZTBot/releases/tag/v2.2.0) breaking changes)
+    		- **[ARG]** `id` let the user update his id if he doesn't exist (only for the [v2.1.0](https://github.com/DarkOnion0/ADZTBot/releases/tag/v2.2.0) breaking changes)
 
 - `/post [CATEGORIE] [LINK]` let user post music or video
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option

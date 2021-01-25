@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 
 
-def timestamp():
+def _timestamp():
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
@@ -18,28 +18,29 @@ class user:
         self.cursor = self.connection.cursor()
 
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS UserData (id INTEGER PRIMARY KEY, username_id INTEGER, username TEXT , creation_date TEXT, birthday TEXT, lvl INTEGER, lvl_xp INTEGER, os TEXT, description TEXT, game TEXT, coins FLOAT, awards_left, timestamp TEXT)"
+            "CREATE TABLE IF NOT EXISTS UserData (id INTEGER PRIMARY KEY, user_id INTEGER, username TEXT , creation_date TEXT, birthday TEXT, lvl INTEGER, lvl_xp INTEGER, os TEXT, description TEXT, game TEXT, coins FLOAT, awards_left, timestamp TEXT)"
         )
         self.connection.commit()
 
     def add(self, username, username_id):
         """Add user in fonctions of the username passed"""
-        user = self.cursor.execute("SELECT username_id FROM UserData").fetchall()
+        user = self.cursor.execute("SELECT user_id FROM UserData").fetchall()
         check = False
 
         for userTmp in user:  # check if the user already exist in the database
-            userTmp = int(userTmp)
-            if username_id == userTmp:
+            userTmp = list(userTmp)
+            print(userTmp)
+            if username_id == userTmp[0]:
                 check = True
 
         if check == False:  # if the user doesn't exist, create his profile
             self.cursor.execute(
-                "INSERT INTO UserData(id, username_id, username, creation_date, timestamp) VALUES((SELECT max(id) FROM UserData)+1, ?, ?, ?, ?)",
+                "INSERT INTO UserData(id, user_id, username, creation_date, timestamp) VALUES((SELECT max(id) FROM UserData)+1, ?, ?, ?, ?)",
                 (
                     username_id,
                     username,
-                    timestamp(),
-                    timestamp(),
+                    _timestamp(),
+                    _timestamp(),
                 ),
             )
             print(username, username_id)
@@ -49,7 +50,7 @@ class user:
             return 0
     
     def update(self, username, username_id, arg=None):
-        user = self.cursor.execute("SELECT id, username_id, username FROM UserData").fetchall()
+        user = self.cursor.execute("SELECT id, user_id, username FROM UserData").fetchall()
 
         print(username, username_id, arg, user)
         print("\nstep 1")
@@ -61,24 +62,15 @@ class user:
                 print("\nstep 2 --> id")
 
                 for i, user_tmp in user: 
-                    #userTmp = str(userTmp[0])
-                    #print(tmp)
-                    #tmp = list(tmp)
-                    #print(tmp, tmp[0], tmp[1], tmp[2])
-                    
-                    #i = tmp[0]
-                    #username_id_tmp = tmp[1]
-                    #user_tmp= tmp[2]
-                    
                     print(i, user_tmp)
                     
                     if username == user_tmp:
                         print("step 2.1")
-                        self.cursor.execute("UPDATE UserData SET username_id = ? WHERE id = ?", (username_id, i,),)
+                        self.cursor.execute("UPDATE UserData SET user_id = ? WHERE id = ?", (username_id, i,),)
 
                         self.connection.commit()
             
-            if arg[1] == "name": # udpate name
+            if arg[1] == "username": # udpate name
                 print("\nstep 2 --> name")
                 
                 for i, username_id_tmp, userTmp in user:  
@@ -109,7 +101,7 @@ class vote:
 
     def post(self, username, t, link):
         """Add a musique or video in the database"""
-        user = self.cursor.execute("SELECT id, username FROM UserData").fetchall()
+        user = self.cursor.execute("SELECT id, user_id FROM UserData").fetchall()
         linkTmp2 = self.cursor.execute("SELECT type, link FROM VoteTable").fetchall()
         check = True
 
@@ -118,7 +110,8 @@ class vote:
 
         for user in user:  # check if the user exist in the database
             user = list(user)
-            if str(user[1]) == username:
+            print(user)
+            if int(user[1]) == username:
                 check = False
                 usernameId = int(user[0])
 
@@ -163,17 +156,16 @@ class vote:
 
     def vote(self, username, t, i, vote):
         """add vote on post"""
-        user = self.cursor.execute("SELECT id, username FROM UserData").fetchall()
-        values = self.cursor.execute(
-            "SELECT id, type, postId FROM VoteTable"
-        ).fetchall()
+        user = self.cursor.execute("SELECT id, user_id FROM UserData").fetchall()
+        values = self.cursor.execute("SELECT id, type, postId FROM VoteTable").fetchall()
         userVote = self.cursor.execute("SELECT id, voteUser FROM VoteTable").fetchall()
         score = self.cursor.execute("SELECT id, score FROM VoteTable").fetchall()
         check = True
 
         for user in user:  # check if the user exist in the database
             user = list(user)
-            if str(user[1]) == username:
+            print(user)
+            if int(user[1]) == username:
                 check = False
                 usernameId = int(user[0])
 
@@ -213,9 +205,9 @@ class vote:
                                 print("step 2.2")
                                 check = True
                 print("step 3")
-                if (
-                    check == False
-                ):  # add vote and username id into the database for the choosen post id
+                
+                if check == False:  # add vote and username id into the database for the choosen post id
+                    
                     uTmp = list(uTmp)
                     uTmp.append(" " + str(usernameId))
                     uTmp = ",".join(uTmp)
@@ -249,45 +241,34 @@ class vote:
         values = self.cursor.execute(
             "SELECT id, type, postId FROM VoteTable"
         ).fetchall()
+        
         post_info = self.cursor.execute(
-            "SELECT id, type, postId, user, link, score, voteUser FROM VoteTable"
+            "SELECT type, postId, user, link, score, voteUser FROM VoteTable"
         ).fetchall()
-        user = self.cursor.execute("SELECT id, username FROM UserData").fetchall()
+        
+        user = self.cursor.execute("SELECT id, user_id FROM UserData").fetchall()
 
         check = True
 
-        for (
-            idTmp,
-            typeTmp,
-            postIdTmp,
-        ) in values:  # check if the post id exist in the database
-            print(idTmp, typeTmp, postIdTmp, i, t)
+#        for idTmp, typeTmp, postIdTmp, in values:  # check if the post id exist in the database            
+#            print(idTmp, typeTmp, postIdTmp, i, t)
+#
+#            if str(typeTmp) == str(t):
+#                print("\nstep 1")
+#
+#                if int(postIdTmp) == int(i):
+#                    db_id_tmp = idTmp
+#                    i_post_tmp = idTmp
+#                    check = False
+#                    print(db_id_tmp, i_post_tmp)
+#
+        for type_tmp, postid_tmp, user_tmp, link_tmp, score_tmp, vote_user_tmp in post_info:
 
-            if str(typeTmp) == str(t):
+            if str(type_tmp) == str(t):
                 print("\nstep 1")
 
-                if int(postIdTmp) == int(i):
-                    db_id_tmp = idTmp
-                    i_post_tmp = idTmp
-                    check = False
-                    print(db_id_tmp, i_post_tmp)
-
-            print("\n   step 1.1")
-
-        if check == False:
-            check = True
-            print("\nstep 2")
-            for (
-                id_tmp,
-                type_tmp,
-                postid_tmp,
-                user_tmp,
-                link_tmp,
-                score_tmp,
-                vote_user_tmp,
-            ) in post_info:
-
-                if id_tmp == db_id_tmp:
+                if int(postid_tmp) == int(i):
+                    print(("step 1.1"))
                     type_f = type_tmp
                     postid_f = postid_tmp
                     user_f = user_tmp
@@ -295,12 +276,36 @@ class vote:
                     score_f = score_tmp
                     vote_user_f = vote_user_tmp
                     print(type_f, postid_f, user_f, link_f, score_f, vote_user_f)
+                    check = False
 
-            print("\n   step 2.2")
-
-            for user_id_tmp, user_name_tmp in user:
+#        if check == False:
+#            check = True
+#            print("\nstep 2")
+#            for (
+#                id_tmp,
+#                type_tmp,
+#                postid_tmp,
+#                user_tmp,
+#                link_tmp,
+#                score_tmp,
+#                vote_user_tmp,
+#            ) in post_info:
+#
+#                if id_tmp == db_id_tmp:
+#                    type_f = type_tmp
+#                    postid_f = postid_tmp
+#                    user_f = user_tmp
+#                    link_f = link_tmp
+#                    score_f = score_tmp
+#                    vote_user_f = vote_user_tmp
+#                    print(type_f, postid_f, user_f, link_f, score_f, vote_user_f)
+#
+#            print("\n   step 2.2")
+#
+        if check == False:
+            for user_id_tmp, user_id_tmp in user:
                 if user_id_tmp == user_f:
-                    user_f = user_name_tmp
+                    user_f = user_id_tmp
                     check = False
                     print(user_f)
 

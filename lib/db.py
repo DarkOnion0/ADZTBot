@@ -238,10 +238,6 @@ class vote:
 
     def stats(self, t, i):
         """give stats on an existing post in the database"""
-        values = self.cursor.execute(
-            "SELECT id, type, postId FROM VoteTable"
-        ).fetchall()
-        
         post_info = self.cursor.execute(
             "SELECT type, postId, user, link, score, voteUser FROM VoteTable"
         ).fetchall()
@@ -250,18 +246,6 @@ class vote:
 
         check = True
 
-#        for idTmp, typeTmp, postIdTmp, in values:  # check if the post id exist in the database            
-#            print(idTmp, typeTmp, postIdTmp, i, t)
-#
-#            if str(typeTmp) == str(t):
-#                print("\nstep 1")
-#
-#                if int(postIdTmp) == int(i):
-#                    db_id_tmp = idTmp
-#                    i_post_tmp = idTmp
-#                    check = False
-#                    print(db_id_tmp, i_post_tmp)
-#
         for type_tmp, postid_tmp, user_tmp, link_tmp, score_tmp, vote_user_tmp in post_info:
 
             if str(type_tmp) == str(t):

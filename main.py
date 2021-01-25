@@ -15,14 +15,16 @@ print("BOT STARTED !!!")
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 DB_PATH = os.getenv("DB_PATH") + "/" + os.getenv("DB_NAME")
-CHANNEL_YT = os.getenv("CHANNEL_YT")
-CHANNEL_SP = os.getenv("CHANNEL_SP")
+CHANNEL_YT = int(os.getenv("CHANNEL_YT"))
+CHANNEL_SP = int(os.getenv("CHANNEL_SP"))
+
+print(TOKEN, DB_PATH, CHANNEL_SP, CHANNEL_YT)
 
 print(DB_PATH)
 
 DataUser = db.user(DB_PATH)
 DataPost = db.vote(DB_PATH)
-v = "latest"
+v = "v.latest"
 
 bot = commands.Bot(command_prefix="/")
 
@@ -106,6 +108,9 @@ async def profile(ctx, *arg):
     author = str(ctx.message.author)
     author = author.split("#")
 
+    user = await bot.fetch_user(authorId)
+    print(user)
+
     # print(arg) # debug
     if arg[0] == "init":
         # print(ctx.message.author, "Hello") # debug
@@ -145,7 +150,7 @@ async def post(ctx, *arg):
 
     author = author.split("#")
 
-    result = DataPost.post(author[0], arg[0], arg[1])
+    result = DataPost.post(authorId, arg[0], arg[1])
     print(result, type(result))
     muId, answer = result
 
@@ -177,6 +182,7 @@ async def post(ctx, *arg):
         if arg[0] == "m":
             embed = discord.Embed(colour=discord.Color.green())
             channelM = bot.get_channel(int(CHANNEL_SP))
+            print(channelM, int(CHANNEL_SP))
         if arg[0] == "v":
             embed = discord.Embed(colour=discord.Color.red())
             channelM = bot.get_channel(int(CHANNEL_YT))
@@ -210,12 +216,13 @@ async def vote(ctx, *arg):
     arg = list(arg)
     author = str(ctx.message.author)
     author = author.split("#")
+    authorId = int(ctx.message.author.id)
 
     if len(arg) != 3:
         msg = "**:warning: ERROR :warning:** please specify *v or m* option, after the music id and finally the vote (+1 or -1)"
         await ctx.send(msg)
 
-    result = DataPost.vote(author[0], arg[0], arg[1], arg[2])
+    result = DataPost.vote(authorId, arg[0], arg[1], arg[2])
 
     if result == 0.1:
         await ctx.send(
@@ -245,6 +252,7 @@ async def stats(ctx, *arg):
 
     arg = list(arg)
     author = str(ctx.message.author)
+    author_id = int(ctx.message.author.id)
     author = author.split("#")
 
     if len(arg) != 2:
@@ -259,6 +267,7 @@ async def stats(ctx, *arg):
         if result == 0.1:
             await ctx.send("**:warning: ERROR 1 :** the post doesn't exist")
         elif result == 1:
+            user_f = await bot.fetch_user(author_id)
 
             # target url
             url = link_f
@@ -277,7 +286,15 @@ async def stats(ctx, *arg):
             g = random.randint(0, 255)
             b = random.randint(0, 255)
 
+            if type_f == "m":
+                type_f = "Music"
+            elif type_f == "v":
+                type_f = "Video"
+
             embed = discord.Embed(colour=discord.Color.from_rgb(r, g, b))
+
+            embed.set_author(name="{}".format(type_f))
+
             embed.add_field(name="Title", value=msg, inline=False)
             embed.add_field(name="User", value=user_f, inline=True)
             embed.add_field(name="Id", value=postid_f, inline=True)

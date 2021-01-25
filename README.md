@@ -57,9 +57,11 @@ CHANNEL_SP= your_channel_for_music_id
 - `/linux info [ARG]` give info on linux and linux distribution
 	- **[ARG]** can be a anything or the name of a linux distribution list in the base command
 
-- `/profile [ARG]`
-	- **[ARG]** right now the only things you can pass to the command is the `init` option
+- `/profile [COMMAND] [ARG]`
+	- **[COMMAND]**
 		- `init` an argument that create your profile in the database
+		- `update` an argument that update your `user_id` or your `username`
+    		- **[ARG]** `id` let the user update his id if he doesn't exist (only for the [v2.2.0](https://github.com/DarkOnion0/ADZTBot/releases/tag/v2.2.0) breaking changes)
 
 - `/post [CATEGORIE] [LINK]` let user post music or video
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
@@ -69,6 +71,10 @@ CHANNEL_SP= your_channel_for_music_id
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
 	- **[ID]** it's the id given after the `#` in the message
 	- **[VOTE]** it can be `+1` or `-1` (you can only vote ontime by post, **⚠️ a vote is definitive**)
+	
+- `/stats [CATEGORIE] [ID]` let the user knows the stat on a post
+	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
+	- **[ID]** it's the id given after the `#` in the message
 
 # Contributing
 - We need your help :handshake:

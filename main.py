@@ -24,7 +24,7 @@ print(DB_PATH)
 
 DataUser = db.user(DB_PATH)
 DataPost = db.vote(DB_PATH)
-v = "v.2.2.0"
+v = "v.2.1.0"
 
 bot = commands.Bot(command_prefix="/")
 

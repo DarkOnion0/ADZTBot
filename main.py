@@ -18,7 +18,7 @@ DB_PATH = os.getenv("DB_PATH") + "/" + os.getenv("DB_NAME")
 CHANNEL_YT = int(os.getenv("CHANNEL_YT"))
 CHANNEL_SP = int(os.getenv("CHANNEL_SP"))
 
-print(TOKEN, DB_PATH, CHANNEL_SP, CHANNEL_YT)
+print("\n .ENV file data :",TOKEN, DB_PATH, CHANNEL_SP, CHANNEL_YT)
 
 print(DB_PATH)
 

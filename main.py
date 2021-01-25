@@ -143,10 +143,8 @@ async def post(ctx, *arg):
     arg = list(arg)
     author = str(ctx.message.author)
     authorId = int(ctx.message.author.id)
-    authorTmp = discord.utils.get(
-        ctx.guild.members, name=str(arg[0]), discriminator=str(arg[1])
-    )
-    print(authorId, authorTmp)
+
+    print(authorId)
 
     author = author.split("#")
 

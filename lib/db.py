@@ -261,33 +261,11 @@ class vote:
                     print(type_f, postid_f, user_f, link_f, score_f, vote_user_f)
                     check = False
 
-#        if check == False:
-#            check = True
-#            print("\nstep 2")
-#            for (
-#                id_tmp,
-#                type_tmp,
-#                postid_tmp,
-#                user_tmp,
-#                link_tmp,
-#                score_tmp,
-#                vote_user_tmp,
-#            ) in post_info:
-#
-#                if id_tmp == db_id_tmp:
-#                    type_f = type_tmp
-#                    postid_f = postid_tmp
-#                    user_f = user_tmp
-#                    link_f = link_tmp
-#                    score_f = score_tmp
-#                    vote_user_f = vote_user_tmp
-#                    print(type_f, postid_f, user_f, link_f, score_f, vote_user_f)
-#
-#            print("\n   step 2.2")
-#
         if check == False:
-            for user_id_tmp, user_id_tmp in user:
-                if user_id_tmp == user_f:
+            check =True
+
+            for db_id_tmp, user_id_tmp in user:
+                if db_id_tmp == user_f:
                     user_f = user_id_tmp
                     check = False
                     print(user_f)

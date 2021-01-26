@@ -265,7 +265,7 @@ async def stats(ctx, *arg):
         if result == 0.1:
             await ctx.send("**:warning: ERROR 1 :** the post doesn't exist")
         elif result == 1:
-            user_f = await bot.fetch_user(author_id)
+            user_f_id = await bot.fetch_user(user_f)
 
             # target url
             url = link_f
@@ -294,7 +294,7 @@ async def stats(ctx, *arg):
             embed.set_author(name="{}".format(type_f))
 
             embed.add_field(name="Title", value=msg, inline=False)
-            embed.add_field(name="User", value=user_f, inline=True)
+            embed.add_field(name="User", value=user_f_id, inline=True)
             embed.add_field(name="Id", value=postid_f, inline=True)
             embed.add_field(name="Score", value=score_f, inline=True)
 

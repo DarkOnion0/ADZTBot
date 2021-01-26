@@ -108,12 +108,11 @@ class vote:
         mCount = 0
         vCount = 0
 
-        for user in user:  # check if the user exist in the database
-            user = list(user)
+        for db_id, user_id in user:  # check if the user exist in the database
             print(user)
-            if int(user[1]) == username:
+            if user_id == username:
                 check = False
-                usernameId = int(user[0])
+                usernameId = db_id
 
         if check == True:
             return (None, 0.1)

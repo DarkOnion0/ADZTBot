@@ -18,7 +18,7 @@ DB_PATH = os.getenv("DB_PATH") + "/" + os.getenv("DB_NAME")
 CHANNEL_YT = int(os.getenv("CHANNEL_YT"))
 CHANNEL_SP = int(os.getenv("CHANNEL_SP"))
 
-print("\n .ENV file data :",TOKEN, DB_PATH, CHANNEL_SP, CHANNEL_YT)
+print("\n .ENV file data :", TOKEN, DB_PATH, CHANNEL_SP, CHANNEL_YT)
 
 print(DB_PATH)
 
@@ -114,9 +114,9 @@ async def profile(ctx, *arg):
     # print(arg) # debug
     if arg[0] == "init":
         # print(ctx.message.author, "Hello") # debug
-        
+
         result = DataUser.add(author[0], authorId)
-        
+
         result = int(result)
         if result == 0:
             await ctx.send("**:warning: ERROR :** You already exist in the database")
@@ -129,8 +129,10 @@ async def profile(ctx, *arg):
     if arg[0] == "update":
         DataUser.update(author[0], authorId, arg=("update_name", arg[1]))
 
-        await ctx.send("**:star: SUCCSES :** Your {} has been succsesfully updated".format(arg[1]))
-    #else:
+        await ctx.send(
+            "**:star: SUCCSES :** Your {} has been succsesfully updated".format(arg[1])
+        )
+    # else:
     #    msg = "**ERROR**\n veuillez mettre un des arguments suivant :\n`init | init your profile in the database`"
     #    await ctx.send(msg)
 

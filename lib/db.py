@@ -27,11 +27,13 @@ class user:
         user = self.cursor.execute("SELECT user_id, username FROM UserData").fetchall()
         check = False
 
-        for user_id, user_name in user:  # check if the user already exist in the database
+        for (
+            user_id,
+            user_name,
+        ) in user:  # check if the user already exist in the database
             print(user_id, user_name)
-            if username_id == user_id:
-                if username == user_name:
-                    check = True
+            if username_id == user_id or username == user_name:
+                check = True
 
         if check == False:  # if the user doesn't exist, create his profile
             self.cursor.execute(
@@ -48,45 +50,62 @@ class user:
             return 1
         else:
             return 0
-    
+
     def update(self, username, username_id, arg=None):
-        user = self.cursor.execute("SELECT id, user_id, username FROM UserData").fetchall()
+        user = self.cursor.execute(
+            "SELECT id, user_id, username FROM UserData"
+        ).fetchall()
 
         print(username, username_id, arg, user)
         print("\nstep 1")
 
         if arg[0] == "update_name":
-            print("step 1.1")            
-            if arg[1] == "id": # udpate id
-                user = self.cursor.execute("SELECT id, username FROM UserData").fetchall()
+            print("step 1.1")
+            if arg[1] == "id":  # udpate id
+                user = self.cursor.execute(
+                    "SELECT id, username FROM UserData"
+                ).fetchall()
                 print("\nstep 2 --> id")
 
-                for i, user_tmp in user: 
+                for i, user_tmp in user:
                     print(i, user_tmp)
-                    
+
                     if username == user_tmp:
                         print("step 2.1")
-                        self.cursor.execute("UPDATE UserData SET user_id = ? WHERE id = ?", (username_id, i,),)
+                        self.cursor.execute(
+                            "UPDATE UserData SET user_id = ? WHERE id = ?",
+                            (
+                                username_id,
+                                i,
+                            ),
+                        )
 
                         self.connection.commit()
-            
-            if arg[1] == "username": # udpate name
+
+            if arg[1] == "username":  # udpate name
                 print("\nstep 2 --> name")
-                
-                for i, username_id_tmp, userTmp in user:  
+
+                for i, username_id_tmp, userTmp in user:
                     username_id = int(username_id_tmp)
-                    
+
                     print(i, username_id_tmp, userTmp)
                     if username_id == username_id_tmp:
                         print("step 2.1")
-                        self.cursor.execute("UPDATE UserData SET username = ? WHERE id = ?", (username, i,),)
+                        self.cursor.execute(
+                            "UPDATE UserData SET username = ? WHERE id = ?",
+                            (
+                                username,
+                                i,
+                            ),
+                        )
 
                         self.connection.commit()
-            
+
 
 class vote:
 
     """A class whixh handle all fonctions for all the vote command in the sqlite database"""
+
     def __init__(self, ConnectionPath):
         """Defined the path of the DB"""
 
@@ -156,7 +175,9 @@ class vote:
     def vote(self, username, t, i, vote):
         """add vote on post"""
         user = self.cursor.execute("SELECT id, user_id FROM UserData").fetchall()
-        values = self.cursor.execute("SELECT id, type, postId FROM VoteTable").fetchall()
+        values = self.cursor.execute(
+            "SELECT id, type, postId FROM VoteTable"
+        ).fetchall()
         userVote = self.cursor.execute("SELECT id, voteUser FROM VoteTable").fetchall()
         score = self.cursor.execute("SELECT id, score FROM VoteTable").fetchall()
         check = True
@@ -204,9 +225,11 @@ class vote:
                                 print("step 2.2")
                                 check = True
                 print("step 3")
-                
-                if check == False:  # add vote and username id into the database for the choosen post id
-                    
+
+                if (
+                    check == False
+                ):  # add vote and username id into the database for the choosen post id
+
                     uTmp = list(uTmp)
                     uTmp.append(" " + str(usernameId))
                     uTmp = ",".join(uTmp)
@@ -240,12 +263,19 @@ class vote:
         post_info = self.cursor.execute(
             "SELECT type, postId, user, link, score, voteUser FROM VoteTable"
         ).fetchall()
-        
+
         user = self.cursor.execute("SELECT id, user_id FROM UserData").fetchall()
 
         check = True
 
-        for type_tmp, postid_tmp, user_tmp, link_tmp, score_tmp, vote_user_tmp in post_info:
+        for (
+            type_tmp,
+            postid_tmp,
+            user_tmp,
+            link_tmp,
+            score_tmp,
+            vote_user_tmp,
+        ) in post_info:
 
             if str(type_tmp) == str(t):
                 print("\nstep 1")
@@ -262,7 +292,7 @@ class vote:
                     check = False
 
         if check == False:
-            check =True
+            check = True
 
             for db_id_tmp, user_id_tmp in user:
                 if db_id_tmp == user_f:

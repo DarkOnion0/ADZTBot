@@ -24,14 +24,14 @@ class user:
 
     def add(self, username, username_id):
         """Add user in fonctions of the username passed"""
-        user = self.cursor.execute("SELECT user_id FROM UserData").fetchall()
+        user = self.cursor.execute("SELECT user_id, username FROM UserData").fetchall()
         check = False
 
-        for userTmp in user:  # check if the user already exist in the database
-            userTmp = list(userTmp)
-            print(userTmp)
-            if username_id == userTmp[0]:
-                check = True
+        for user_id, user_name in user:  # check if the user already exist in the database
+            print(user_id, user_name)
+            if username_id == user_id:
+                if username == user_name:
+                    check = True
 
         if check == False:  # if the user doesn't exist, create his profile
             self.cursor.execute(

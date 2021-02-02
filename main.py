@@ -219,10 +219,14 @@ async def vote(ctx, *arg):
     authorId = int(ctx.message.author.id)
 
     if len(arg) != 3:
-        msg = "**:warning: ERROR :warning:** please specify *v or m* option, after the music id and finally the vote (+1 or -1)"
+        msg = "**:warning: ERROR :warning:** please specify *v or m* option, after the music id and finally the vote (+ or -)"
         await ctx.send(msg)
-
-    result = DataPost.vote(authorId, arg[0], arg[1], arg[2])
+        
+    if arg[2] == "+" or arg[2] == "-":
+        result = DataPost.vote(authorId, arg[0], arg[1], arg[2])
+    else:
+        result = None
+        await ctx.send("**:warning: ERROR 0 :** please put `+` or `-` for voting")
 
     if result == 0.1:
         await ctx.send(

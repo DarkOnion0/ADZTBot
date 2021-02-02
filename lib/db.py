@@ -226,13 +226,16 @@ class vote:
                                 check = True
                 print("step 3")
 
-                if (
-                    check == False
-                ):  # add vote and username id into the database for the choosen post id
+                if check == False:  # add vote and username id into the database for the choosen post id
 
                     uTmp = list(uTmp)
                     uTmp.append(" " + str(usernameId))
                     uTmp = ",".join(uTmp)
+
+                    if vote == "+":
+                        vote = +1
+                    elif vote == "-":
+                        vote = -1
 
                     for idTmp, scoreTmp in score:
                         if idTmp == iTmp:

@@ -71,7 +71,7 @@ CHANNEL_SP= your_channel_for_music_id
 - `/vote [CATEGORIE] [ID] [VOTE]` let user vote on existing post
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
 	- **[ID]** it's the id given after the `#` in the message
-	- **[VOTE]** it can be `+1` or `-1` (you can only vote ontime by post, **⚠️ a vote is definitive**)
+	- **[VOTE]** it can be `+` or `-` (you can only vote ontime by post, **⚠️ a vote is definitive**)
 	
 - `/stats [CATEGORIE] [ID]` let the user knows the stat on a post
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option

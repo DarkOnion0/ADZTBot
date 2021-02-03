@@ -172,12 +172,12 @@ async def post(ctx, *arg):
         reqs = requests.get(url)
         urlDict = link_preview.generate_dict(url)
         # using the BeaitifulSoup module
-        soup = BeautifulSoup(reqs.text, "html.parser")
+        #soup = BeautifulSoup(reqs.text, "html.parser")
         # displaying the title
-        for title in soup.find_all("title"):
-            url = title.get_text()
+        #for title in soup.find_all("title"):
+        #    url = title.get_text()
 
-        msg = "[{}]({})".format(url, arg[1])
+        msg = "[{}]({})".format(urlDict["description"], arg[1])
 
         if arg[0] == "m":
             embed = discord.Embed(colour=discord.Color.green())
@@ -277,15 +277,15 @@ async def stats(ctx, *arg):
             # target url
             url = link_f
             # making requests instance
-            reqs = requests.get(url)
+            #reqs = requests.get(url)
             urlDict = link_preview.generate_dict(url)
             # using the BeaitifulSoup module
-            soup = BeautifulSoup(reqs.text, "html.parser")
+            #soup = BeautifulSoup(reqs.text, "html.parser")
             # displaying the title
-            for title in soup.find_all("title"):
-                url = title.get_text()
+            #for title in soup.find_all("title"):
+            #    url = title.get_text()
 
-            msg = "[{}]({})".format(url, link_f)
+            msg = "[{}]({})".format(urlDict["description"], link_f)
 
             r = random.randint(0, 255)  # random color chooser
             g = random.randint(0, 255)

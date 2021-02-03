@@ -166,16 +166,8 @@ async def post(ctx, *arg):
     if answer == 1:  # SUCCESS
         print("Hello")
 
-        # target url
         url = arg[1]
-        # making requests instance
-        reqs = requests.get(url)
         urlDict = link_preview.generate_dict(url)
-        # using the BeaitifulSoup module
-        #soup = BeautifulSoup(reqs.text, "html.parser")
-        # displaying the title
-        #for title in soup.find_all("title"):
-        #    url = title.get_text()
 
         msg = "[{}]({})".format(urlDict["description"], arg[1])
 
@@ -274,16 +266,8 @@ async def stats(ctx, *arg):
             user_f_id = await bot.fetch_user(user_f)
             user_f_name = str(user_f_id).split("#")
 
-            # target url
             url = link_f
-            # making requests instance
-            #reqs = requests.get(url)
             urlDict = link_preview.generate_dict(url)
-            # using the BeaitifulSoup module
-            #soup = BeautifulSoup(reqs.text, "html.parser")
-            # displaying the title
-            #for title in soup.find_all("title"):
-            #    url = title.get_text()
 
             msg = "[{}]({})".format(urlDict["description"], link_f)
 

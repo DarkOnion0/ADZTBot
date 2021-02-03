@@ -13,3 +13,5 @@ __pycache__
 .vscode
 .vim
 .pytest_cache
+
+build

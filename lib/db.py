@@ -124,6 +124,8 @@ class vote:
         linkTmp2 = self.cursor.execute("SELECT type, link FROM VoteTable").fetchall()
         check = True
 
+        link = link.split("?si=")
+        
         mCount = 0
         vCount = 0
 
@@ -139,15 +141,17 @@ class vote:
             check2 = True
 
             for typeTmp, linkTmp in linkTmp2:
-                linkTmp = list(linkTmp)
-                if "".join(linkTmp) == link:
+                #linkTmp = str(linkTmp)
+                linkTmp = linkTmp.split("?si=")
+                print("linkTmp = {}".format(linkTmp))
+                if linkTmp[0] == link[0]:
                     check2 = False
                 if typeTmp == "m":
                     mCount += 1
                 if typeTmp == "v":
                     vCount += 1
                 print("\n")
-                print("".join(linkTmp), link, t, typeTmp)
+                print("".join(linkTmp), link[0], t, typeTmp)
 
             if check2 == True:
                 if t == "m":
@@ -161,7 +165,7 @@ class vote:
                         idTmp,
                         usernameId,
                         t,
-                        link,
+                        link[0],
                         1,
                         voteUser,
                     ),

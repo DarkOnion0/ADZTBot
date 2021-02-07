@@ -100,6 +100,70 @@ class user:
                         )
 
                         self.connection.commit()
+    
+    def stats(self, user_id: int, result="small"):
+        """"A object that return the stats on a user"""
+        print(str(user_id))
+        check = True
+        # collect the user info from the DB
+        try:
+            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, lvl, lvl_xp, os, description, game FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall() # try a direct query
+            
+            user = list(user[0])
+            print(user, len(user))
+
+            id_f = user[0]
+            creation_f = user[2]
+            birthday_f = user[3]
+            lvl_f = user[4]
+            lvlxp_f = user[5]
+            os_f = user[6]
+            description_f = user[7]
+            game_f = user[8]
+
+            check = False
+
+            print("step 1_1")
+        except:
+            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, lvl, lvl_xp, os, description, game FROM UserData").fetchall() # try a large query if the first try failed
+            for id_tmp, user_id_tmp, creation_tmp, birthday_tmp, lvl_tmp, lvlxp_tmp, os_tmp, description_tmp, game_tmp in user:
+                if str(user_id_tmp) == str(user_id):
+ 
+                    id_f = id_tmp
+                    creation_f = creation_tmp
+                    birthday_f = birthday_tmp
+                    lvl_f = lvl_tmp
+                    lvlxp_f = lvlxp_tmp
+                    os_f = os_tmp
+                    description_f = description_tmp
+                    game_f = game_tmp
+
+                    check = False
+                    print("step 1_2")
+                    pass
+
+        if check == False:
+
+            if result == "small":
+                print("step 2_1")
+                post_tmp = self.cursor.execute("SELECT id FROM VoteTable WHERE user = ?", (str(id_f)),).fetchall()
+                post_f = len(post_tmp)
+                return 1, creation_f, lvl_f, post_f
+
+            elif result == "full":
+                print("step 2_2")
+                # get the number of post and score for a giver user
+                post_tmp = self.cursor.execute("SELECT id, score FROM VoteTable WHERE user = ?", (str(id_f)),).fetchall()
+                
+                post_f = len(post_tmp)
+                score_f = int()
+                
+                for id_tmp, score_tmp in post_tmp:
+                    score_f += score_tmp
+                
+                return 1, score_f, lvlxp_f, birthday_f, os_f, description_f, game_f, creation_f, lvl_f, post_f
+        else:
+            return 0.1
 
 
 class vote:

@@ -17,6 +17,24 @@ TOKEN = os.getenv("DISCORD_TOKEN")
 DB_PATH = os.getenv("DB_PATH") + "/" + os.getenv("DB_NAME")
 CHANNEL_YT = int(os.getenv("CHANNEL_YT"))
 CHANNEL_SP = int(os.getenv("CHANNEL_SP"))
+GUILD = os.getenv('DISCORD_GUILD')
+
+client = discord.Client()
+bot = commands.Bot(command_prefix="/")
+
+@client.event
+async def on_ready():
+    for guild in client.guilds:
+        if guild.name == GUILD:
+            break
+
+    print(
+        f'{client.user} is connected to the following guild:\n'
+        f'{guild.name}(id: {guild.id})\n'
+    )
+
+    members = '\n - '.join([member.name for member in guild.members])
+    print(f'Guild Members:\n - {members}')
 
 print("\n .ENV file data :", TOKEN, DB_PATH, CHANNEL_SP, CHANNEL_YT)
 
@@ -24,9 +42,8 @@ print(DB_PATH)
 
 DataUser = db.user(DB_PATH)
 DataPost = db.vote(DB_PATH)
-v = "v.2.1.3"
+v = "latest"
 
-bot = commands.Bot(command_prefix="/")
 
 client = discord.Client()
 bot.remove_command("help")
@@ -65,6 +82,7 @@ async def linux(ctx, *arg):
     # info command, give a list of linux distro
     if arg[0] == "info":
         if len(arg) == 1:
+            #emebed = discord.Embed(color=discord.Color.orange())
             msg = "**Linux > ALL | YOU MUST CHECK ONE OF THESE LINUX DISTRO :** \n***Arch based distro:*** \n- archlinux \n- manjaro \n- endeavourOS \n\n***RPM distro*** \n- fedora \n- centos stream \n\n***Debian / Ubuntu based distro*** \n- debian \n- linux mint \n- PopOS \n- ubuntu flavour \n\nhttps://tenor.com/view/mst3k-join-us-come-gif-13947932"
             await ctx.send(msg)
         if len(arg) == 2:
@@ -132,6 +150,35 @@ async def profile(ctx, *arg):
         await ctx.send(
             "**:star: SUCCSES :** Your {} has been succsesfully updated".format(arg[1])
         )
+
+    if arg[0] == "stats":
+        print(arg[0], arg[1])
+        try:
+            if arg[1] == "full":
+                print("step 1_1")
+                result = DataUser.stats(arg[2], arg[1])
+            else:
+                raise AttributeError
+        except AttributeError:
+            print("step 1_2")
+            result = DataUser.stats(arg[1])
+        
+        result = list(result)
+        print(len(result))
+        
+        if result[0] == 0.1:
+            await ctx.send("**:warning: ERROR 1:** The user doesn't exist")
+        else:
+            if len(result) == 10:
+                print("step 2_1")
+                await ctx.send(result)
+            else:
+                print("step 2_2")
+                await ctx.send(result)
+
+        
+        print(result)
+
     # else:
     #    msg = "**ERROR**\n veuillez mettre un des arguments suivant :\n`init | init your profile in the database`"
     #    await ctx.send(msg)

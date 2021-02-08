@@ -119,7 +119,9 @@ async def pouf(ctx):
     help="Main command for setup a Server Profile (en dev)",
     pass_context=True,
 )
-async def profile(ctx, *arg):
+async def profile(ctx, *arg, member: discord.Member = None):
+    #member = ctx.author if not member else member
+    print(member)
     # arg = str(arg)
     # arg = arg.split(" ")
     authorId = int(ctx.message.author.id)
@@ -128,6 +130,7 @@ async def profile(ctx, *arg):
 
     user = await bot.fetch_user(authorId)
     print(user)
+    #client.get_all_members() # TODO enable the user to give a usernmae instead of an id
 
     # print(arg) # debug
     if arg[0] == "init":
@@ -151,27 +154,40 @@ async def profile(ctx, *arg):
             "**:star: SUCCSES :** Your {} has been succsesfully updated".format(arg[1])
         )
 
-    if arg[0] == "stats":
+    if arg[0] == "stats": # FIXME enable the usage of a subcommand for the user stats
         print(arg[0], arg[1])
         try:
             if arg[1] == "full":
                 print("step 1_1")
                 result = DataUser.stats(arg[2], arg[1])
+                user_id = arg[2]
             else:
-                raise AttributeError
-        except AttributeError:
+                raise IndexError
+        except IndexError:
             print("step 1_2")
             result = DataUser.stats(arg[1])
+            user_id = arg[1]
         
         result = list(result)
         print(len(result))
-        
+
+        r = random.randint(0, 255)  # random color chooser
+        g = random.randint(0, 255)
+        b = random.randint(0, 255)
+
+        #user = bot.get_user(user_id)
+
+        print(user)
+
+        embed = discord.Embed(colour=discord.Color.from_rgb(r, g, b))
+        embed.set_author(name=user.name, icon_url=user.avatar_url)
+
         if result[0] == 0.1:
             await ctx.send("**:warning: ERROR 1:** The user doesn't exist")
         else:
             if len(result) == 10:
                 print("step 2_1")
-                await ctx.send(result)
+                await ctx.send(embed=embed)
             else:
                 print("step 2_2")
                 await ctx.send(result)
@@ -290,8 +306,8 @@ async def vote(ctx, *arg):
 # stat command
 
 
-@bot.command(name="stats", pass_context=True)
-async def stats(ctx, *arg):
+@bot.command(name="pstats", pass_context=True)
+async def pstats(ctx, *arg):
 
     arg = list(arg)
     author = str(ctx.message.author)

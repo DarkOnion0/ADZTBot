@@ -161,7 +161,7 @@ class user:
                 for id_tmp, score_tmp in post_tmp:
                     score_f += score_tmp
                 
-                return 1, score_f, lvlxp_f, birthday_f, os_f, description_f, game_f, creation_f, lvl_f, post_f
+                return 1,  creation_f, lvl_f, post_f, score_f, lvlxp_f, birthday_f, os_f, description_f, game_f
         else:
             return 0.1
 

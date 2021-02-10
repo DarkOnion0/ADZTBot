@@ -43,7 +43,7 @@ print(DB_PATH)
 
 DataUser = db.user(DB_PATH)
 DataPost = db.vote(DB_PATH)
-v = "v3.0.0-beta"
+v = "v3.0.0"
 
 
 client = discord.Client()

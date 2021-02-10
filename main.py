@@ -162,7 +162,10 @@ async def ustasts(ctx, member: discord.Member = None):
     print(member.id)
 
     result = DataUser.stats(member.id)
-    result = list(result)
+    try:
+        result = list(result)
+    except TypeError:
+        result = [0.1]
 
     print(result)
 

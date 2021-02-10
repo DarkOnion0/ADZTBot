@@ -16,5 +16,6 @@ ENV DB_PATH=data
 ENV DB_NAME=bot_data
 ENV CHANNEL_YT=null
 ENV CHANNEL_SP=null
+ENV DISCORD_GUILD=null
 
 CMD ["sh", "start.sh"]

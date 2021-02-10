@@ -1,4 +1,4 @@
-FROM python:3.9.1-buster
+FROM pypy:3
 MAINTAINER DarkOnion0
 
 WORKDIR /usr/src/ADZTBot

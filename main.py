@@ -70,9 +70,9 @@ async def help(ctx):
     )
     embed.set_thumbnail(url=urlDict["image"])
     
-    end_time = "--- %s seconds ---" % (time.time() - start_time)
+    end_time = "%s seconds" % (time.time() - start_time)
    
-    embed.set_footer(text=v+ " " + end_time)
+    embed.set_footer(text=v+ " | " + end_time)
 
     await ctx.send(embed=embed)
 

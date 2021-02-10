@@ -9,6 +9,8 @@ else
 
 	echo CHANNEL_YT=$CHANNEL_YT >> .env
 	echo CHANNEL_SP=$CHANNEL_SP >> .env
+	
+	echo DISCORD_GUILD=$DISCORD_GUILD >> .env
 
 	mkdir $DB_PATH
 	

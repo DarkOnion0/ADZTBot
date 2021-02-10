@@ -63,6 +63,8 @@ CHANNEL_SP= your_channel_for_music_id
 		- `update` an argument that update your `user_id` or your `username`
     		- **[ARG]** `id` let the user update his id if he doesn't exist (only for the [v2.1.0](https://github.com/DarkOnion0/ADZTBot/releases/tag/v2.2.0) breaking changes)
 			- **[ARG]** `name` let the user update his username, making the admin jobs easier :grin:
+- `/ustats [USER]`
+  - **[USER]** you can put a username for getting the user's information and stats or anything else for getting yours
 
 - `/post [CATEGORIE] [LINK]` let user post music or video
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
@@ -71,9 +73,9 @@ CHANNEL_SP= your_channel_for_music_id
 - `/vote [CATEGORIE] [ID] [VOTE]` let user vote on existing post
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
 	- **[ID]** it's the id given after the `#` in the message
-	- **[VOTE]** it can be `+` or `-` (you can only vote ontime by post, **⚠️ a vote is definitive**)
+	- **[VOTE]** it can be `+` or `-` (you can only vote onetime by post, **⚠️ a vote is definitive**)
 	
-- `/stats [CATEGORIE] [ID]` let the user knows the stat on a post
+- `/pstats [CATEGORIE] [ID]` let the user knows the stat on a post
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
 	- **[ID]** it's the id given after the `#` in the message
 

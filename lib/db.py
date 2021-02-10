@@ -101,7 +101,7 @@ class user:
 
                         self.connection.commit()
     
-    def stats(self, user_id: int, result="small"):
+    def stats(self, user_id: int, result="full"):
         """"A object that return the stats on a user"""
         print(str(user_id))
         check = True

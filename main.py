@@ -123,18 +123,13 @@ async def pouf(ctx):
     help="Main command for setup a Server Profile (en dev)",
     pass_context=True,
 )
-async def profile(ctx, *arg, member: discord.Member = None):
-    #member = ctx.author if not member else member
-    print(member)
-    # arg = str(arg)
-    # arg = arg.split(" ")
+async def profile(ctx, *arg):
     authorId = int(ctx.message.author.id)
     author = str(ctx.message.author)
     author = author.split("#")
 
     user = await bot.fetch_user(authorId)
     print(user)
-    #client.get_all_members() # TODO enable the user to give a usernmae instead of an id
 
     # print(arg) # debug
     if arg[0] == "init":
@@ -158,56 +153,18 @@ async def profile(ctx, *arg, member: discord.Member = None):
             "**:star: SUCCSES :** Your {} has been succsesfully updated".format(arg[1])
         )
 
-    if arg[0] == "stats": # FIXME enable the usage of a subcommand for the user stats
-        print(arg[0], arg[1])
-        try:
-            if arg[1] == "full":
-                print("step 1_1")
-                result = DataUser.stats(arg[2], arg[1])
-                user_id = arg[2]
-            else:
-                raise IndexError
-        except IndexError:
-            print("step 1_2")
-            result = DataUser.stats(arg[1])
-            user_id = arg[1]
-        
-        result = list(result)
-        print(len(result))
-
-        r = random.randint(0, 255)  # random color chooser
-        g = random.randint(0, 255)
-        b = random.randint(0, 255)
-
-        #user = bot.get_user(user_id)
-
-        print(user)
-
-        embed = discord.Embed(colour=discord.Color.from_rgb(r, g, b))
-        embed.set_author(name=user.name, icon_url=user.avatar_url)
-
-        if result[0] == 0.1:
-            await ctx.send("**:warning: ERROR 1:** The user doesn't exist")
-        else:
-            if len(result) == 10:
-                print("step 2_1")
-                await ctx.send(embed=embed)
-            else:
-                print("step 2_2")
-                await ctx.send(result)
-
-        
-        print(result)
-
-    # else:
-    #    msg = "**ERROR**\n veuillez mettre un des arguments suivant :\n`init | init your profile in the database`"
-    #    await ctx.send(msg)
-
 # user stats
 @bot.command(name="ustats")
 async def ustasts(ctx, member: discord.Member = None):
     member = ctx.author if not member else member
     roles = [role for role in member.roles]
+
+    print(member.id)
+
+    result = DataUser.stats(member.id)
+    result = list(result)
+
+    print(result)
 
     embed = discord.Embed(colour=member.color, timestamp=ctx.message.created_at)
 
@@ -215,11 +172,18 @@ async def ustasts(ctx, member: discord.Member = None):
     embed.set_thumbnail(url=member.avatar_url)
     embed.set_footer(text=f"Summon by {ctx.author}", icon_url= ctx.author.avatar_url)
 
-    embed.add_field(name="Name:", value=member.mention)
-    embed.add_field(name="ID:", value=member.id)
+    embed.add_field(name="Name:", value=member.mention, inline=False)
+    embed.add_field(name="ID:", value=member.id, inline=False)
 
-    embed.add_field(name="Created at:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"))
-    embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]))
+    if result[0] == 1:
+        embed.add_field(name="Description:", value=str(result[8]) + "\n\n" + str(result[7]))
+        embed.add_field(name=f"Level ({result[2]})", value=result[5], inline=False)
+        embed.add_field(name=f"Post ({result[3]})", value=result[4], inline=False)
+    
+    embed.add_field(name="Created at:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=False)
+    embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]), inline=False)
+
+
 
     embed.add_field(name="Bot ?", value=member.bot)
 

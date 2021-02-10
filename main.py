@@ -2,6 +2,7 @@ import os
 import random
 import discord
 import requests
+import time
 from bs4 import BeautifulSoup
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -51,6 +52,8 @@ bot.remove_command("help")
 # help
 @bot.command(name="help")
 async def help(ctx):
+    start_time = time.time()
+    
     urlDict = link_preview.generate_dict("https://github.com/DarkOnion0/ADZTBot")
     embed = discord.Embed(
         title=urlDict["title"],
@@ -66,7 +69,10 @@ async def help(ctx):
         url="https://github.com/DarkOnion0/ADZTBot",
     )
     embed.set_thumbnail(url=urlDict["image"])
-    embed.set_footer(text=v)
+    
+    end_time = "--- %s seconds ---" % (time.time() - start_time)
+   
+    embed.set_footer(text=v+ " " + end_time)
 
     await ctx.send(embed=embed)
 
@@ -112,8 +118,6 @@ async def pouf(ctx):
 
 
 # user info
-
-
 @bot.command(
     name="profile",
     help="Main command for setup a Server Profile (en dev)",
@@ -199,10 +203,30 @@ async def profile(ctx, *arg, member: discord.Member = None):
     #    msg = "**ERROR**\n veuillez mettre un des arguments suivant :\n`init | init your profile in the database`"
     #    await ctx.send(msg)
 
+# user stats
+@bot.command(name="ustats")
+async def ustasts(ctx, member: discord.Member = None):
+    member = ctx.author if not member else member
+    roles = [role for role in member.roles]
+
+    embed = discord.Embed(colour=member.color, timestamp=ctx.message.created_at)
+
+    embed.set_author(name=f"User Stats | {member.display_name}")
+    embed.set_thumbnail(url=member.avatar_url)
+    embed.set_footer(text=f"Summon by {ctx.author}", icon_url= ctx.author.avatar_url)
+
+    embed.add_field(name="Name:", value=member.mention)
+    embed.add_field(name="ID:", value=member.id)
+
+    embed.add_field(name="Created at:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"))
+    embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]))
+
+    embed.add_field(name="Bot ?", value=member.bot)
+
+    await ctx.send(embed=embed)
+
 
 # post command
-
-
 @bot.command(name="post", pass_context=True, add_reactions=True, embed_links=True)
 async def post(ctx, *arg):
     arg = list(arg)

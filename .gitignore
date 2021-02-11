@@ -2,7 +2,7 @@
 .env
 env
 
-test.py
+test.*
 
 darkbot.db
 

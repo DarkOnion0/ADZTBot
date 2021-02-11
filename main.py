@@ -43,7 +43,7 @@ print(DB_PATH)
 
 DataUser = db.user(DB_PATH)
 DataPost = db.vote(DB_PATH)
-v = "v3.0.3"
+v = "latest"
 
 
 client = discord.Client()
@@ -223,13 +223,14 @@ async def post(ctx, *arg):
         url = arg[1]
         urlDict = link_preview.generate_dict(url)
 
-        msg = "[{}]({})".format(urlDict["description"], arg[1])
 
         if arg[0] == "m":
+            msg = "[{}]({})".format(urlDict["description"], arg[1])
             embed = discord.Embed(colour=discord.Color.green())
             channelM = bot.get_channel(int(CHANNEL_SP))
             print(channelM, int(CHANNEL_SP))
         if arg[0] == "v":
+            msg = "[{}]({})".format(urlDict["title"], arg[1])
             embed = discord.Embed(colour=discord.Color.red())
             channelM = bot.get_channel(int(CHANNEL_YT))
         embed.set_author(

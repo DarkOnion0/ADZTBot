@@ -165,10 +165,64 @@ class user:
         else:
             return 0.1
 
+    def xp(self, user_id: int, xp: int):
+        
+        check = False
+        
+        try:
+            user_info = self.cursor.execute("SELECT lvl, lvl_xp, id FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall()
+            check = True
+        except:
+            check = False
 
+        if check == True:
+
+            user_info = list(user_info[0])
+            print(user_info, xp, "start")
+            
+            try:
+                user_info[0] = int(user_info[0])
+                user_info[1] = int(user_info[1])
+            except:
+                pass
+
+            if user_info[0] == None or user_info[1] == None:
+
+                user_info[0] = 1
+                user_info[1] = 1
+                print(user_info, "step 1.1")
+
+            user_info[1] += xp
+
+            print(user_info, "middle")
+
+            lvl_bar = user_info[0] * 4 + user_info[0]
+
+            print(lvl_bar, type(lvl_bar), user_info[1], type(user_info[1]), "middle end")
+ 
+            if int(lvl_bar) <= float(user_info[1]):
+                user_info[0] += 1
+                user_info[1] = 0
+                print(user_info, "end")
+
+            
+            print(user_info, "end 2")
+
+            try:
+                self.connection.execute("UPDATE UserData SET lvl = ?, lvl_xp = ? WHERE user_id = ?", (user_info[0], user_info[1], user_id),)
+                self.connection.commit()
+                a = 1
+            except:
+                a = 0.2
+
+            return a
+        
+        else:
+            return 0.1
+                
 class vote:
 
-    """A class whixh handle all fonctions for all the vote command in the sqlite database"""
+    """A class which handle all fonctions for all the vote command in the sqlite database"""
 
     def __init__(self, ConnectionPath):
         """Defined the path of the DB"""
@@ -230,12 +284,13 @@ class vote:
                         usernameId,
                         t,
                         link[0],
-                        1,
+                        0,
                         voteUser,
                     ),
                 )
                 self.connection.commit()
                 print(idTmp)
+
                 return (idTmp, 1)
             else:
                 return (None, 0.2)

@@ -209,49 +209,59 @@ async def post(ctx, *arg):
     muId, answer = result
 
     print(answer)
-    if answer == 0.1:  # ERROR -> profile doesn't exist
-        await ctx.send(
-            "**:warning: ERROR 1 :** please create a profile by typing `/profile init`"
-        )
-    if answer == 0.2:  # ERROR -> already post
-        await ctx.send(
-            "**:warning: ERROR 2 :** please don't post a link that was already post"
-        )
-    if answer == 1:  # SUCCESS
-        print("Hello")
-
+    try:
         url = arg[1]
         urlDict = link_preview.generate_dict(url)
+        download_passed = True
+    except:
+        download_passed = False
+
+    if download_passed == True:
+        if answer == 0.1:  # ERROR -> profile doesn't exist
+            await ctx.send(
+                "**:warning: ERROR 1 :** please create a profile by typing `/profile init`"
+            )
+        if answer == 0.2:  # ERROR -> already post
+            await ctx.send(
+                "**:warning: ERROR 2 :** please don't post a link that was already post"
+            )
+        if answer == 1:  # SUCCESS
+            print("Hello")
+
+            #url = arg[1]
+            #urlDict = link_preview.generate_dict(url)
 
 
-        if arg[0] == "m":
-            msg = "[{}]({})".format(urlDict["description"], arg[1])
-            embed = discord.Embed(colour=discord.Color.green())
-            channelM = bot.get_channel(int(CHANNEL_SP))
-            print(channelM, int(CHANNEL_SP))
-        if arg[0] == "v":
-            msg = "[{}]({})".format(urlDict["title"], arg[1])
-            embed = discord.Embed(colour=discord.Color.red())
-            channelM = bot.get_channel(int(CHANNEL_YT))
-        embed.set_author(
-            name="Posted by {}".format(author[0]), icon_url=ctx.author.avatar_url
-        )
+            if arg[0] == "m":
+                msg = "[{}]({})".format(urlDict["description"], arg[1])
+                embed = discord.Embed(colour=discord.Color.green())
+                channelM = bot.get_channel(int(CHANNEL_SP))
+                print(channelM, int(CHANNEL_SP))
+            if arg[0] == "v":
+                msg = "[{}]({})".format(urlDict["title"], arg[1])
+                embed = discord.Embed(colour=discord.Color.red())
+                channelM = bot.get_channel(int(CHANNEL_YT))
+            embed.set_author(
+                name="Posted by {}".format(author[0]), icon_url=ctx.author.avatar_url
+            )
 
-        if arg[0] == "m":
-            embed.add_field(name="Music #{}".format(muId), value=msg, inline=True)
-        if arg[0] == "v":
-            embed.add_field(name="Video #{}".format(muId), value=msg, inline=True)
+            if arg[0] == "m":
+                embed.add_field(name="Music #{}".format(muId), value=msg, inline=True)
+            if arg[0] == "v":
+                embed.add_field(name="Video #{}".format(muId), value=msg, inline=True)
 
-        embed.set_image(url=urlDict["image"])
+            embed.set_image(url=urlDict["image"])
 
-        await channelM.send(
-            embed=embed
-        )  # send message in the channel for music proposal
-        await ctx.send(
-            "**:star: SUCCESS : **Your post has been registred successfully \n```type = {} \nlink = {} \nid = {}```".format(
-                arg[0], arg[1], muId
-            )  # send message in the current channel
-        )
+            await channelM.send(
+                embed=embed
+            )  # send message in the channel for music proposal
+            await ctx.send(
+                "**:star: SUCCESS : **Your post has been registred successfully \n```type = {} \nlink = {} \nid = {}```".format(
+                    arg[0], arg[1], muId
+                )  # send message in the current channel
+            )
+    else:
+        await ctx.send("**:warning: ERROR 3:** Please post a valid url")
 
 
 # vote command
@@ -264,6 +274,8 @@ async def vote(ctx, *arg):
     author = str(ctx.message.author)
     author = author.split("#")
     authorId = int(ctx.message.author.id)
+
+    print(author, arg)
 
     if len(arg) != 3:
         msg = "**:warning: ERROR :warning:** please specify *v or m* option, after the music id and finally the vote (+ or -)"

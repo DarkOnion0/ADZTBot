@@ -180,7 +180,7 @@ async def ustasts(ctx, member: discord.Member = None):
 
     if result[0] == 1:
         embed.add_field(name="Description:", value=str(result[8]) + "\n\n" + str(result[7]))
-        embed.add_field(name=f"Level ({result[2]})", value=result[5], inline=False)
+        embed.add_field(name=f"Level ({result[2]})", value=f"**:sparkles: level experience |** {result[5]} \n\n**:trophy: total experience |** {result[10]}", inline=False)
         embed.add_field(name=f"Post ({result[3]})", value=result[4], inline=False)
     
     embed.add_field(name="Created at:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=False)

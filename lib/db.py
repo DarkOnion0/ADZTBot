@@ -107,7 +107,7 @@ class user:
         check = True
         # collect the user info from the DB
         try:
-            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, lvl, lvl_xp, os, description, game FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall() # try a direct query
+            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, lvl, lvl_xp, os, description, game, xp_full FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall() # try a direct query
             
             user = list(user[0])
             print(user, len(user))
@@ -120,13 +120,14 @@ class user:
             os_f = user[6]
             description_f = user[7]
             game_f = user[8]
+            xp_f = user[9]
 
             check = False
 
             print("step 1_1")
         except:
-            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, lvl, lvl_xp, os, description, game FROM UserData").fetchall() # try a large query if the first try failed
-            for id_tmp, user_id_tmp, creation_tmp, birthday_tmp, lvl_tmp, lvlxp_tmp, os_tmp, description_tmp, game_tmp in user:
+            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, lvl, lvl_xp, os, description, game, xp_full FROM UserData").fetchall() # try a large query if the first try failed
+            for id_tmp, user_id_tmp, creation_tmp, birthday_tmp, lvl_tmp, lvlxp_tmp, os_tmp, description_tmp, game_tmp, xp_tmp in user:
                 if str(user_id_tmp) == str(user_id):
  
                     id_f = id_tmp
@@ -137,6 +138,7 @@ class user:
                     os_f = os_tmp
                     description_f = description_tmp
                     game_f = game_tmp
+                    xp_f = xp_tmp
 
                     check = False
                     print("step 1_2")
@@ -161,7 +163,7 @@ class user:
                 for id_tmp, score_tmp in post_tmp:
                     score_f += score_tmp
                 
-                return 1,  creation_f, lvl_f, post_f, score_f, lvlxp_f, birthday_f, os_f, description_f, game_f
+                return 1,  creation_f, lvl_f, post_f, score_f, lvlxp_f, birthday_f, os_f, description_f, game_f, xp_f
         else:
             return 0.1
 

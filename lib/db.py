@@ -18,7 +18,7 @@ class user:
         self.cursor = self.connection.cursor()
 
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS UserData (id INTEGER PRIMARY KEY, user_id INTEGER, username TEXT , creation_date TEXT, birthday TEXT, lvl INTEGER, lvl_xp INTEGER, os TEXT, description TEXT, game TEXT, coins FLOAT, awards_left, timestamp TEXT)"
+            "CREATE TABLE IF NOT EXISTS UserData (id INTEGER PRIMARY KEY, user_id INTEGER, username TEXT , creation_date TEXT, birthday TEXT, lvl INTEGER, lvl_xp INTEGER, xp_full INTEGER, os TEXT, description TEXT, game TEXT, coins FLOAT, awards_left, timestamp TEXT)"
         )
         self.connection.commit()
 
@@ -166,17 +166,34 @@ class user:
             return 0.1
 
     def xp(self, user_id: int, xp: int):
+        """
+        An object that manage all the things related to add or delete xp to a user\n
+        
+        Result
+        ==========
+         1    all was done successfully
+         0.1  the user doesn't exist   
+
+        """
         
         check = False
         
         try:
-            user_info = self.cursor.execute("SELECT lvl, lvl_xp, id FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall()
+            user_info = self.cursor.execute("SELECT lvl, lvl_xp, xp_full FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall()
+            assert len(user_info) == 1
             check = True
-        except:
-            check = False
+            is_user_id = True
+        except AssertionError:
+            try:
+                user_info = self.cursor.execute("SELECT lvl, lvl_xp, xp_full FROM UserData WHERE id = ?", (str(user_id),),).fetchall()
+                check = True
+                is_user_id = False
+            except:
+                check = False
 
         if check == True:
-
+            
+            print(user_info)
             user_info = list(user_info[0])
             print(user_info, xp, "start")
             
@@ -190,9 +207,11 @@ class user:
 
                 user_info[0] = 1
                 user_info[1] = 1
+                user_info[2] = 1
                 print(user_info, "step 1.1")
 
-            user_info[1] += xp
+            user_info[1] += (xp)
+            user_info[2] += (xp)
 
             print(user_info, "middle")
 
@@ -201,30 +220,32 @@ class user:
             print(lvl_bar, type(lvl_bar), user_info[1], type(user_info[1]), "middle end")
  
             if int(lvl_bar) <= float(user_info[1]):
+                
+                diff = user_info[1] - lvl_bar
                 user_info[0] += 1
-                user_info[1] = 0
+                user_info[1] = 0 + diff
                 print(user_info, "end")
 
             
             print(user_info, "end 2")
 
-            try:
-                self.connection.execute("UPDATE UserData SET lvl = ?, lvl_xp = ? WHERE user_id = ?", (user_info[0], user_info[1], user_id),)
-                self.connection.commit()
-                a = 1
-            except:
-                a = 0.2
+            if is_user_id == True:
+                self.connection.execute("UPDATE UserData SET lvl = ?, lvl_xp = ?, xp_full = ? WHERE user_id = ?", (user_info[0], user_info[1], user_info[2], user_id),)
+            else:
+                self.connection.execute("UPDATE UserData SET lvl = ?, lvl_xp = ?, xp_full = ? WHERE id = ?", (user_info[0], user_info[1], user_info[2], user_id),)
 
-            return a
+            self.connection.commit()
+        
+            return 1 # SUCCSES
         
         else:
-            return 0.1
+            return 0.1 # ERROR 0: the user doesn't exists
                 
 class vote:
 
     """A class which handle all fonctions for all the vote command in the sqlite database"""
 
-    def __init__(self, ConnectionPath):
+    def __init__(self, ConnectionPath: str):
         """Defined the path of the DB"""
 
         self.connection = sqlite3.connect(ConnectionPath)
@@ -235,6 +256,9 @@ class vote:
             "CREATE TABLE IF NOT EXISTS VoteTable (id INTEGER PRIMARY KEY, type TEXT, postId INTEGER, user INTEGER, link TEXT, score INTEGER, voteUser TEXT, FOREIGN KEY(user) REFERENCES UserData(id))"
         )
         self.connection.commit()
+
+        self.user_xp = user(ConnectionPath)
+
 
     def post(self, username, t, link):
         """Add a musique or video in the database"""
@@ -298,9 +322,7 @@ class vote:
     def vote(self, username, t, i, vote):
         """add vote on post"""
         user = self.cursor.execute("SELECT id, user_id FROM UserData").fetchall()
-        values = self.cursor.execute(
-            "SELECT id, type, postId FROM VoteTable"
-        ).fetchall()
+        values = self.cursor.execute("SELECT user, id, type, postId FROM VoteTable").fetchall()
         userVote = self.cursor.execute("SELECT id, voteUser FROM VoteTable").fetchall()
         score = self.cursor.execute("SELECT id, score FROM VoteTable").fetchall()
         check = True
@@ -316,17 +338,17 @@ class vote:
 
         if check == False:
             check = True
-            for (
-                idTmp,
-                typeTmp,
-                postIdTmp,
-            ) in values:  # check if the post id exist in the database
+            
+            for user_tmp, idTmp, typeTmp, postIdTmp in values:  # check if the post id exist in the database and retrive the user id in the DB
                 print(idTmp, typeTmp, postIdTmp, i, t)
+            
                 if str(typeTmp) == str(t):
                     print("step 1.1")
+            
                     if int(postIdTmp) == int(i):
                         check = False
                         iTmp = idTmp
+                        user_id_f = user_tmp
 
             print("step 2")
 
@@ -338,19 +360,22 @@ class vote:
                     userTmp = userTmp.split(",")
                     userAll = userTmp
                     print(userTmp)
+                    
                     if idTmp == iTmp:
                         uTmp = userTmp
+                        print("step 2.1.1\n", uTmp)
+                    
                         for userTmp2 in userTmp:
-                            print(
-                                userTmp2, usernameId, type(userTmp2), type(usernameId)
-                            )
+                            print(userTmp2, usernameId, type(userTmp2), type(usernameId))
+
                             if int(userTmp2) == usernameId:
                                 print("step 2.2")
                                 check = True
+
                 print("step 3")
 
-                if check == False:  # add vote and username id into the database for the choosen post id
-
+                if check == False:  # add vote and username id into the database for the chosen post id
+                    print("step 3.1")
                     uTmp = list(uTmp)
                     uTmp.append(" " + str(usernameId))
                     uTmp = ",".join(uTmp)
@@ -361,22 +386,31 @@ class vote:
                         vote = -1
 
                     for idTmp, scoreTmp in score:
+                        print("step 3.2")
                         if idTmp == iTmp:
                             scoreEnd = scoreTmp + (int(vote))
                             print(scoreEnd, type(scoreEnd))
 
                     userAll.append(iTmp)
-                    print(userAll)
+                    print(userAll, "userAll")
 
-                    self.cursor.execute(
-                        "UPDATE VoteTable SET score = ?, voteUser = ? WHERE id = ?",
-                        (scoreEnd, uTmp, iTmp),
-                    )
-                    self.connection.commit()
+                    result = self.user_xp.xp(user_id_f, vote)
 
-                    print("step 4")
+                    if int(result) == 1:
+                        print("step 3.3")
+                    
+                        self.cursor.execute(
+                            "UPDATE VoteTable SET score = ?, voteUser = ? WHERE id = ?",
+                            (scoreEnd, uTmp, iTmp),
+                        )
 
-                    return 1  # succses
+                        self.connection.commit()
+
+                        print("step 4")
+
+                        return 1 # success
+                    else:
+                        return 0.4  # adding the xp failed
                 else:
                     return 0.3  # the user already vote
             else:

@@ -22,7 +22,7 @@ A little discord bot made just for fun :grin: with Discord.py framework and shar
 ## Docker 🐋
 
 1. pull the image from the github registry `docker pull ghcr.io/darkonion0/adztbot:<release>` or `docker pull ghcr.io/darkonion0/adztbot:latest` for the unstable one
-2. start the container with a `.env` file for the environement variables, `docker run -dv your_path_for_data:/usr/src/ADZTBot/the_name_of_the_data_folder_choosen --env-file=.env --name ADZTBot ghcr.io/darkonion0/adztbot:<choosen_version>`
+2. start the container with a `.env` file for the environement variables, `docker run -dv your_path_for_data:/usr/src/ADZTBot/the_name_of_the_data_folder_choosen --env-file=.env --name ADZTBot ghcr.io/darkonion0/adztbot:<chosen_version>`
 
 ## Linux 🐧
 

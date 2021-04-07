@@ -102,12 +102,14 @@ class user:
                         self.connection.commit()
     
     def stats(self, user_id: int, result="full"):
-        """"A object that return the stats on a user"""
-        print(str(user_id))
+        """
+        A object that return the stats on a user
+        """
+        print(int(user_id))
         check = True
         # collect the user info from the DB
         try:
-            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, lvl, lvl_xp, os, description, game, xp_full FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall() # try a direct query
+            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, os, description, game, xp_full FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall() # try a direct query
             
             user = list(user[0])
             print(user, len(user))
@@ -115,26 +117,43 @@ class user:
             id_f = user[0]
             creation_f = user[2]
             birthday_f = user[3]
-            lvl_f = user[4]
-            lvlxp_f = user[5]
-            os_f = user[6]
-            description_f = user[7]
-            game_f = user[8]
-            xp_f = user[9]
+            
+            tmp = self.xp(user_id=user[1], xp=user[7], show=True)
+            tmp = list(tmp)
+            if tmp[0] == 1:
+                lvl_f = tmp[1]
+            else:
+                lvl_f = f"ERROR {tmp[0]}"
+        
+            #print(tmp, "TMP")
+            
+            #lvlxp_f = user[5]
+            os_f = user[4]
+            description_f = user[5]
+            game_f = user[6]
+            xp_f = user[7]
 
             check = False
 
-            print("step 1_1")
+            print("step 1_1 stats", xp_f)
+            
         except:
-            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, lvl, lvl_xp, os, description, game, xp_full FROM UserData").fetchall() # try a large query if the first try failed
-            for id_tmp, user_id_tmp, creation_tmp, birthday_tmp, lvl_tmp, lvlxp_tmp, os_tmp, description_tmp, game_tmp, xp_tmp in user:
+            user = self.cursor.execute("SELECT id, user_id, creation_date, birthday, os, description, game, xp_full FROM UserData").fetchall() # try a large query if the first try failed
+            for id_tmp, user_id_tmp, creation_tmp, birthday_tmp, os_tmp, description_tmp, game_tmp, xp_tmp in user:
                 if str(user_id_tmp) == str(user_id):
  
                     id_f = id_tmp
                     creation_f = creation_tmp
                     birthday_f = birthday_tmp
-                    lvl_f = lvl_tmp
-                    lvlxp_f = lvlxp_tmp
+                    
+                    tmp = self.xp(user_id=user_id_tmp, xp=xp_tmp, show=True)
+                    tmp = list(tmp)
+                    if tmp[0] == 1:
+                        lvl_f = tmp[1]
+                    else:
+                        lvl_f = f"ERROR {tmp[0]}"
+                    
+                    #lvlxp_f = lvlxp_tmp
                     os_f = os_tmp
                     description_f = description_tmp
                     game_f = game_tmp
@@ -163,85 +182,79 @@ class user:
                 for id_tmp, score_tmp in post_tmp:
                     score_f += score_tmp
                 
-                return 1,  creation_f, lvl_f, post_f, score_f, lvlxp_f, birthday_f, os_f, description_f, game_f, xp_f
+                return 1,  creation_f, lvl_f, post_f, score_f, birthday_f, os_f, description_f, game_f, xp_f
         else:
             return 0.1
 
-    def xp(self, user_id: int, xp: int):
+    def xp(self, user_id: int, xp: int, show = False):
         """
         An object that manage all the things related to add or delete xp to a user\n
         
         Result
         ==========
-         1    all was done successfully
-         0.1  the user doesn't exist   
+         1      all was done successfully
+         0.1    the user doesn't exist
+         0.2    an error occured during the job
 
         """
         
         check = False
         
+        print(user_id)
+                
+        # Get user indo from the database
         try:
-            user_info = self.cursor.execute("SELECT lvl, lvl_xp, xp_full FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall()
+            user_info = self.cursor.execute("SELECT xp_full FROM UserData WHERE user_id = ?", (int(user_id),),).fetchall()
+            print(user_info, "user_info")
             assert len(user_info) == 1
             check = True
             is_user_id = True
-        except AssertionError:
+            print("\n\nSUCCES")
+        except:
             try:
                 user_info = self.cursor.execute("SELECT lvl, lvl_xp, xp_full FROM UserData WHERE id = ?", (str(user_id),),).fetchall()
                 check = True
                 is_user_id = False
             except:
                 check = False
+            print("\n\nERROR")
 
         if check == True:
             
-            print(user_info)
+            print("user_info", xp, show, user_info)
             user_info = list(user_info[0])
-            print(user_info, xp, "start")
+            user_xp = user_info[0]
+            print(user_xp, xp, show, "start")
             
-            try:
-                user_info[0] = int(user_info[0])
-                user_info[1] = int(user_info[1])
-            except:
-                pass
+            if show == True:
+                try:
+                    lvl = user_xp / 5
+                    lvl = int(lvl)
 
-            if user_info[0] == None or user_info[1] == None:
+                    print(lvl, user_xp, "end")
 
-                user_info[0] = 1
-                user_info[1] = 1
-                user_info[2] = 1
-                print(user_info, "step 1.1")
-
-            user_info[1] += (xp)
-            user_info[2] += (xp)
-
-            print(user_info, "middle")
-
-            lvl_bar = user_info[0] * 4 + user_info[0]
-
-            print(lvl_bar, type(lvl_bar), user_info[1], type(user_info[1]), "middle end")
- 
-            if int(lvl_bar) <= float(user_info[1]):
-                
-                diff = user_info[1] - lvl_bar
-                user_info[0] += 1
-                user_info[1] = 0 + diff
-                print(user_info, "end")
-
-            
-            print(user_info, "end 2")
-
-            if is_user_id == True:
-                self.connection.execute("UPDATE UserData SET lvl = ?, lvl_xp = ?, xp_full = ? WHERE user_id = ?", (user_info[0], user_info[1], user_info[2], user_id),)
+                    r = (1, lvl)
+                    return r
+                except:
+                    r = (0.2, None)
+                    return r 
             else:
-                self.connection.execute("UPDATE UserData SET lvl = ?, lvl_xp = ?, xp_full = ? WHERE id = ?", (user_info[0], user_info[1], user_info[2], user_id),)
+                try:
+                    user_xp = user_xp + (xp)
+                    print(user_xp)
 
-            self.connection.commit()
-        
-            return 1 # SUCCSES
+                    self.connection.execute("UPDATE UserData SET xp_full = ? WHERE user_id = ?", (user_xp,int(user_id),),)
+
+                    self.connection.commit()
+                    r = (1, None) # SUCCSES
+                    return r
+                except:
+                    r = (0.2, None)
+                    return r
         
         else:
-            return 0.1 # ERROR 0: the user doesn't exists
+            r = (0.1, None) # ERROR 0: the user doesn't exists
+            return r
                 
 class vote:
 

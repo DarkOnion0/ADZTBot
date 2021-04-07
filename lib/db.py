@@ -307,8 +307,8 @@ class vote:
                     mCount += 1
                 if typeTmp == "v":
                     vCount += 1
-                print("\n")
-                print("".join(linkTmp), link[0], t, typeTmp)
+                #print("\n")
+                #print("".join(linkTmp), link[0], t, typeTmp)
 
             if check2 == True:
                 if t == "m":
@@ -336,18 +336,20 @@ class vote:
 
     def vote(self, username, t, i, vote):
         """add vote on post"""
-        user = self.cursor.execute("SELECT id, user_id FROM UserData").fetchall()
+        #user = self.cursor.execute("SELECT id, user_id FROM UserData").fetchall() # DEPRECATED
+        user_v2 = self.cursor.execute("SELECT id, user_id FROM UserData").fetchall()
         values = self.cursor.execute("SELECT user, id, type, postId FROM VoteTable").fetchall()
         userVote = self.cursor.execute("SELECT id, voteUser FROM VoteTable").fetchall()
         score = self.cursor.execute("SELECT id, score FROM VoteTable").fetchall()
         check = True
 
-        for user in user:  # check if the user exist in the database
+        for user in user_v2:  # check if the user exist in the database
             user = list(user)
             print(user)
             if int(user[1]) == username:
                 check = False
                 usernameId = int(user[0])
+                user_id = int(user[1])
 
         print("\nstep 1", type(vote), vote)
 
@@ -408,10 +410,22 @@ class vote:
 
                     userAll.append(iTmp)
                     print(userAll, "userAll")
+                    print(user_id_f, user_id, vote)
+                    
+                    print(user_v2)
+                    for user in user_v2:  # check if the user exist in the database
+                        print(user)
+                        user = list(user)
+                        print(user)
+                        if int(user[0]) == user_id_f:
+                            check = False
+                            user_id_poster = int(user[1]) 
 
-                    result = self.user_xp.xp(user_id_f, vote)
 
-                    if int(result) == 1:
+                    result = self.user_xp.xp(user_id=user_id_poster, xp=vote, show=False)
+                    result = list(result)
+
+                    if int(result[0]) == 1:
                         print("step 3.3")
                     
                         self.cursor.execute(

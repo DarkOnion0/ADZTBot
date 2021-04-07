@@ -43,7 +43,7 @@ print(DB_PATH)
 
 DataUser = db.user(DB_PATH)
 DataPost = db.vote(DB_PATH)
-v = "v4.0.0-beta"
+v = "latest"
 
 
 client = discord.Client()
@@ -175,15 +175,16 @@ async def ustasts(ctx, member: discord.Member = None):
     embed.set_thumbnail(url=member.avatar_url)
     embed.set_footer(text=f"Summon by {ctx.author}", icon_url= ctx.author.avatar_url)
 
-    embed.add_field(name="Name:", value=member.mention, inline=False)
-    embed.add_field(name="ID:", value=member.id, inline=False)
+    embed.add_field(name="Name", value=member.mention, inline=False)
+    embed.add_field(name="ID", value=member.id, inline=False)
 
     if result[0] == 1:
-        embed.add_field(name="Description:", value=str(result[8]) + "\n\n" + str(result[7]))
-        embed.add_field(name=f"Level ({result[2]})", value=f"**:sparkles: level experience |** {result[5]} \n\n**:trophy: total experience |** {result[10]}", inline=False)
+        embed.add_field(name="Description", value=str(result[7]))
+        embed.add_field(name="Games", value=str(result[8]), inline=False)
+        embed.add_field(name=f"Level ({result[2]})", value=f"**:trophy: experience |** {result[9]}", inline=False)
         embed.add_field(name=f"Post ({result[3]})", value=result[4], inline=False)
     
-    embed.add_field(name="Created at:", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=False)
+    embed.add_field(name="Created at", value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"), inline=False)
     embed.add_field(name=f"Roles ({len(roles)})", value=" ".join([role.mention for role in roles]), inline=False)
 
 
@@ -212,6 +213,13 @@ async def post(ctx, *arg):
     try:
         url = arg[1]
         urlDict = link_preview.generate_dict(url)
+        # making requests instance 
+        reqs = requests.get(url) 
+        # using the BeaitifulSoup module 
+        soup = BeautifulSoup(reqs.text, 'html.parser') 
+        # displaying the title 
+        for title in soup.find_all('title'): 
+          title = title.get_text()
         download_passed = True
     except:
         download_passed = False

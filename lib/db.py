@@ -18,7 +18,7 @@ class user:
         self.cursor = self.connection.cursor()
 
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS UserData (id INTEGER PRIMARY KEY, user_id INTEGER, username TEXT , creation_date TEXT, birthday TEXT, lvl INTEGER, lvl_xp INTEGER, xp_full INTEGER, os TEXT, description TEXT, game TEXT, coins FLOAT, awards_left, timestamp TEXT)"
+            "CREATE TABLE IF NOT EXISTS UserData (id INTEGER PRIMARY KEY, user_id INTEGER, username TEXT , creation_date TEXT, birthday TEXT, xp_full INTEGER, os TEXT, description TEXT, game TEXT, coins FLOAT, awards_left, timestamp TEXT)"
         )
         self.connection.commit()
 
@@ -37,12 +37,13 @@ class user:
 
         if check == False:  # if the user doesn't exist, create his profile
             self.cursor.execute(
-                "INSERT INTO UserData(id, user_id, username, creation_date, timestamp) VALUES((SELECT max(id) FROM UserData)+1, ?, ?, ?, ?)",
+                "INSERT INTO UserData(id, user_id, username, creation_date, timestamp, xp_full) VALUES((SELECT max(id) FROM UserData)+1, ?, ?, ?, ?, ?)",
                 (
                     username_id,
                     username,
                     _timestamp(),
                     _timestamp(),
+                    1,
                 ),
             )
             print(username, username_id)

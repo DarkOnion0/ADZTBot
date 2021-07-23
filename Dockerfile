@@ -1,4 +1,4 @@
-FROM python:3.9.1
+FROM python:3.10.0b4
 MAINTAINER DarkOnion0
 
 WORKDIR /usr/src/ADZTBot

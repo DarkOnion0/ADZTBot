@@ -50,32 +50,32 @@ CHANNEL_SP= your_channel_for_music_id
 
 # Command list
 
-- `/pouf` simulate a coins launch (pile ou face game)
+- `.pouf` simulate a coins launch (pile ou face game)
 
-- `/dice` simulate a dice
+- `.dice` simulate a dice
 
-- `/linux info [ARG]` give info on linux and linux distribution
+- `.linux info [ARG]` give info on linux and linux distribution
 	- **[ARG]** can be a anything or the name of a linux distribution list in the base command
 
-- `/profile [COMMAND] [ARG]`
+- `.profile [COMMAND] [ARG]`
 	- **[COMMAND]**
 		- `init` an argument that create your profile in the database
 		- `update` an argument that update your `user_id` or your `username`
     		- **[ARG]** `id` let the user update his id if he doesn't exist (only for the [v2.1.0](https://github.com/DarkOnion0/ADZTBot/releases/tag/v2.2.0) breaking changes)
 			- **[ARG]** `name` let the user update his username, making the admin jobs easier :grin:
-- `/ustats [USER]`
+- `.ustats [USER]`
   - **[USER]** you can put a username for getting the user's information and stats or anything else for getting yours
 
-- `/post [CATEGORIE] [LINK]` let user post music or video
+- `.post [CATEGORIE] [LINK]` let user post music or video
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
 	- **[LINK]** it is the link you want to share
 
-- `/vote [CATEGORIE] [ID] [VOTE]` let user vote on existing post
+- `.vote [CATEGORIE] [ID] [VOTE]` let user vote on existing post
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
 	- **[ID]** it's the id given after the `#` in the message
 	- **[VOTE]** it can be `+` or `-` (you can only vote onetime by post, **⚠️ a vote is definitive**)
 	
-- `/pstats [CATEGORIE] [ID]` let the user knows the stat on a post
+- `.pstats [CATEGORIE] [ID]` let the user knows the stat on a post
 	- **[CATEGORIE]** it can be `m` (music) or `v` (vidéo) option
 	- **[ID]** it's the id given after the `#` in the message
 

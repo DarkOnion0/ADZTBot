@@ -15,13 +15,14 @@ print("BOT STARTED !!!")
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
-DB_PATH = os.getenv("DB_PATH") + "/" + os.getenv("DB_NAME")
+DB_PATH = os.getenv("DB_PATH") + "." + os.getenv("DB_NAME")
 CHANNEL_YT = int(os.getenv("CHANNEL_YT"))
 CHANNEL_SP = int(os.getenv("CHANNEL_SP"))
 GUILD = os.getenv('DISCORD_GUILD')
+COMMAND_PREFIX = os.getenv("COMMAND_PREFIX")
 
 client = discord.Client()
-bot = commands.Bot(command_prefix="/")
+bot = commands.Bot(command_prefix=COMMAND_PREFIX)
 
 @client.event
 async def on_ready():
@@ -37,13 +38,13 @@ async def on_ready():
     members = '\n - '.join([member.name for member in guild.members])
     print(f'Guild Members:\n - {members}')
 
-print("\n .ENV file data :", TOKEN, DB_PATH, CHANNEL_SP, CHANNEL_YT)
+print("\n .ENV file data :", TOKEN, DB_PATH, CHANNEL_SP, CHANNEL_YT, COMMAND_PREFIX)
 
 print(DB_PATH)
 
 DataUser = db.user(DB_PATH)
 DataPost = db.vote(DB_PATH)
-v = "v4.0.1"
+v = "v4.0.2"
 
 
 client = discord.Client()

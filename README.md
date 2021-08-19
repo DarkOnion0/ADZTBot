@@ -44,6 +44,9 @@ DB_PATH= your_db_path
 # Using docker you can omit this line in your .env file (defaut value = bot_data), with a directe script you MUST specify the name
 DB_NAME= your_db_name
 
+# MANDATORY variable (it will defind the command prefix)
+COMMAND_PREFIX=.
+
 CHANNEL_YT= your_channel_for_video_id
 CHANNEL_SP= your_channel_for_music_id
 ```

@@ -15,7 +15,7 @@ print("BOT STARTED !!!")
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
-DB_PATH = os.getenv("DB_PATH") + "." + os.getenv("DB_NAME")
+DB_PATH = os.getenv("DB_PATH") + "/" + os.getenv("DB_NAME")
 CHANNEL_YT = int(os.getenv("CHANNEL_YT"))
 CHANNEL_SP = int(os.getenv("CHANNEL_SP"))
 GUILD = os.getenv('DISCORD_GUILD')

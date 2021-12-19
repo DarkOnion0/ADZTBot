@@ -2,6 +2,8 @@
 
 ![Docker](https://github.com/DarkOnion0/ADZTBot/workflows/Docker/badge.svg?branch=master)
 
+> ***:warning: WARNING, ADZTBot is no longer maintained and will no longer receive any security update, please consider switching to is [new version there](https://github.com/DarkOnion0/ADZTBotV2) :warning:***
+
 A little discord bot made just for fun :grin: with Discord.py framework and shared with docker. The project is currently in **BETA**, so it can have some bugs
 
 # Features :rocket:
